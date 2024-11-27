@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/index.ts | pino-pretty",
-    "build": "tsup",
+    "build": "npm install --include=dev && tsup",
     "start": "node dist/index.js",
     "clean": "rimraf dist coverage",
     "lint": "biome check src/",
@@ -41,7 +41,7 @@
     "pino-pretty": "^11.0.0",
     "rimraf": "^6.0.0",
     "supertest": "^7.0.0",
-    "tsup": "^8.0.2",
+    "tsup": "^8.3.5",
     "tsx": "^4.7.2",
     "typescript": "^5.4.4",
     "vite-tsconfig-paths": "^5.0.0",
