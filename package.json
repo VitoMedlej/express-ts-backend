@@ -15,8 +15,7 @@
     "lint": "biome check src/",
     "lint:fix": "biome check src/ --fix",
     "format": "biome format src/",
-    "test": "vitest run",
-    "prepare": "husky"
+    "test": "vitest run"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",
