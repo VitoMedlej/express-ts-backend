@@ -19,7 +19,7 @@ userRegistry.registerPath({
   responses: createApiResponse(z.array(UserSchema), "Success"),
 });
 
-userRouter.get("/", userController.getUsers);
+// userRouter.get("/", userController.getUsers);
 
 userRegistry.registerPath({
   method: "get",
