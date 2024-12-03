@@ -8,11 +8,9 @@ import jwt from "jsonwebtoken";
 const authenticateRequest : RequestHandler = (req, res, next) => {
     const jwtSecret = env.JWT_SECRET;
     const isProduction = Boolean(env.NODE_ENV == 'production');
-    console.log('isProduction: ', isProduction && typeof  isProduction);
-  
+    
     if (isProduction == true) {
 
-    
     const authToken = req.headers["authorization"]
         ?.split(" ")[1];
     if (!authToken) {
