@@ -37,8 +37,8 @@ export class productsService {
 
 
 
-
-    async addProduct(newProduct: Product): Promise<ServiceResponse<null>> {
+    // returns the inserted product object stringified
+    async addProduct(newProduct: Product): Promise<ServiceResponse<null | string>> {
         try {
           console.log('newProduct: ', newProduct);
           if (!newProduct || !newProduct.title || !newProduct.price || !newProduct.category) {
@@ -57,13 +57,14 @@ export class productsService {
           } as any;
     
           const result = await productsCollection.insertOne(documentToInsert);
+          console.log('result: ', result);
           if (!result.acknowledged) {
             logger.error("Failed to add product.");
             return ServiceResponse.failure("Failed to add product.", null, StatusCodes.INTERNAL_SERVER_ERROR);
           }
     
           logger.info("Product added successfully.");
-          return ServiceResponse.success("Product added successfully.", null);
+          return ServiceResponse.success("Product added successfully.", JSON.stringify(documentToInsert));
     
         } catch (error) {
           logger.error(`Error adding product: ${(error as Error).message}`);
