@@ -6,4 +6,5 @@ export const productsRouter: Router = express.Router();
 
 // Define routes manually
 productsRouter.get("/", productsController.getHomeProducts); // Get all products
+productsRouter.post("/add", productsController.saveProduct); // Get all products
 // productsRouter.get("/:id", validateRequest(GetProductSchema), productsController.getProductById); // Get product by ID

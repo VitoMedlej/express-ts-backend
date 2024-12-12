@@ -4,7 +4,7 @@ import { commonValidations } from "@/common/utils/commonValidation";
 
 export type Product = z.infer<typeof ProductSchema>;
 export const ProductSchema = z.object({
-  id: z.number(),
+  // id: z.number(),
   title: z.string(),
   description: z.string(),
   price: z.number().positive(),
@@ -16,5 +16,6 @@ export const ProductSchema = z.object({
 });
 
 export const GetProductSchema = z.object({
-  params: z.object({ id: commonValidations.id }),
+  params: z.object({  }),
+  // params: z.object({ id: commonValidations.id }),
 });

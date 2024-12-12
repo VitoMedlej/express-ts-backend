@@ -8,6 +8,11 @@ class ProductsController {
         const serviceResponse = await ProductsService.getHomeProducts();
         return handleServiceResponse(serviceResponse, res);
     }
+
+    saveProduct : RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.addProduct(req.body?.product ?? null);
+        return handleServiceResponse(serviceResponse, res);
+    }
 }
 
 export const productsController = new ProductsController(); 
