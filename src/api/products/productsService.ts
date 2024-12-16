@@ -4,43 +4,78 @@ import {connectToDatabase, getCollection} from "@/database/mongodbClient";
 import {StatusCodes} from "http-status-codes";
 import {logger} from "@/server";
 import { ObjectId } from "mongodb";
+import { Request } from "express"; 
+
+
+
 
 export class productsService {
 
-    async getHomeProducts() : Promise < ServiceResponse < Product[] | null >> {
-        try {
-
-            const db = await connectToDatabase();
-            const productsCollection = await getCollection(db, "Products");
-            const rawProducts = await productsCollection
-                .find()
-                .toArray();
-
-            if (!rawProducts || rawProducts.length === 0) {
-                return ServiceResponse.failure("No products found", null, StatusCodes.NOT_FOUND);
+   
+  async getHomeProducts(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data: { id: string; name: any; category: any; }[]; _id: string; title: string | null; }[] | null>> {
+    const sections: { filterBy: string; value: string | null }[] = req.body || [];
+    console.log('sections: ', sections);
+  
+    try {
+      const db = await connectToDatabase();
+      const productsCollection = await getCollection(db, "Products");
+  
+      // Prepare the result array
+      const results = [];
+  
+      // Loop through each section and query the database
+      for (const section of sections) {
+        let query: any = {}; // Initialize empty query object
+  
+        switch (section.filterBy) {
+          case 'new-arrivals':
+            query = {  }; // New arrivals filter
+            // query = { ...query, createdAt: { $gte: new Date() } }; // New arrivals filter
+            break;
+          case 'category':
+            if (section.value) {
+              query = { category: section.value }; // Category filter
             }
-
-            rawProducts.forEach((product) => {
-                if (!product.title || !product.price) {
-                    logger.warn("Invalid product detected:", product);
-                }
-            });
-
-            return ServiceResponse.success("Products found", rawProducts as Product[]);
-
-        } catch (error) {
-            const errorMessage = `Error fetching products: ${ (error as Error).message}`;
-            logger.error(errorMessage);
-            return ServiceResponse.failure("An error occurred while retrieving products.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+            break;
+          default:
+            break;
         }
+  
+        // Fetch products based on the query
+        const rawProducts = await productsCollection.find(query).toArray();
+  
+        if (rawProducts.length > 0) {
+          results.push({
+            Sectiontype: section.filterBy,
+            data: rawProducts.map(product => ({
+              id: product._id.toString(),
+              name: product.title,
+              category: product.category,
+            })),
+            _id: `section-${results.length + 1}`,
+            title: section.filterBy === 'new-arrivals' ? 'New Arrivals' : section.value,
+          });
+        }
+      }
+  
+      if (results.length === 0) {
+        return ServiceResponse.failure("No products found", null, StatusCodes.NOT_FOUND);
+      }
+  
+      return ServiceResponse.success("Products found", results);
+  
+    } catch (error) {
+      const errorMessage = `Error fetching products: ${(error as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while retrieving products.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
+  }
 
 
 
-    // returns the inserted product object stringified
     async addProduct(newProduct: Product): Promise<ServiceResponse<null | string>> {
         try {
-          console.log('newProduct: ', newProduct);
+          
           if (!newProduct || !newProduct.title || !newProduct.price || !newProduct.category) {
             logger.warn("Missing required fields.");
             return ServiceResponse.failure("Missing required fields.", null, StatusCodes.BAD_REQUEST);

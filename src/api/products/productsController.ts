@@ -5,7 +5,7 @@ import { ProductsService } from "./productsService";
 
 class ProductsController {
     getHomeProducts : RequestHandler = async (req, res) => {
-        const serviceResponse = await ProductsService.getHomeProducts();
+        const serviceResponse = await ProductsService.getHomeProducts(req);
         return handleServiceResponse(serviceResponse, res);
     }
 
