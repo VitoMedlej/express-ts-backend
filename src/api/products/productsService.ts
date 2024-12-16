@@ -12,24 +12,23 @@ import { Request } from "express";
 export class productsService {
 
    
-  async getHomeProducts(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data: { id: string; name: any; category: any; }[]; _id: string; title: string | null; }[] | null>> {
+  async getHomeProducts(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data:Product[]; _id: string; title: string | null; }[] | null>> {
     const sections: { filterBy: string; value: string | null }[] = req.body || [];
-    console.log('sections: ', sections);
   
     try {
       const db = await connectToDatabase();
       const productsCollection = await getCollection(db, "Products");
   
-      // Prepare the result array
+     
       const results = [];
   
-      // Loop through each section and query the database
+     
       for (const section of sections) {
-        let query: any = {}; // Initialize empty query object
+        let query: any = {}; 
   
         switch (section.filterBy) {
           case 'new-arrivals':
-            query = {  }; // New arrivals filter
+            query = {  }; 
             // query = { ...query, createdAt: { $gte: new Date() } }; // New arrivals filter
             break;
           case 'category':
@@ -44,13 +43,14 @@ export class productsService {
         // Fetch products based on the query
         const rawProducts = await productsCollection.find(query).toArray();
   
-        if (rawProducts.length > 0) {
+        if (rawProducts && rawProducts.length > 0) {
           results.push({
             Sectiontype: section.filterBy,
             data: rawProducts.map(product => ({
               id: product._id.toString(),
-              name: product.title,
-              category: product.category,
+              ...product
+
+              
             })),
             _id: `section-${results.length + 1}`,
             title: section.filterBy === 'new-arrivals' ? 'New Arrivals' : section.value,
@@ -62,7 +62,7 @@ export class productsService {
         return ServiceResponse.failure("No products found", null, StatusCodes.NOT_FOUND);
       }
   
-      return ServiceResponse.success("Products found", results);
+      return ServiceResponse.success("Products found", results as any);
   
     } catch (error) {
       const errorMessage = `Error fetching products: ${(error as Error).message}`;
