@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { commonValidations } from "@/common/utils/commonValidation";
+// import { commonValidations } from "@/common/utils/commonValidation";
 
 export type Product = z.infer<typeof ProductSchema>;
 export const ProductSchema = z.object({

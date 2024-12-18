@@ -5,6 +5,7 @@ import { productsController } from "./productsController";
 export const productsRouter: Router = express.Router();
 
 // Define routes manually
-productsRouter.post("/home", productsController.getHomeProducts); // Get all products
-productsRouter.post("/add", productsController.saveProduct); // Get all products
-// productsRouter.get("/:id", validateRequest(GetProductSchema), productsController.getProductById); // Get product by ID
+productsRouter.post("/home", productsController.getHomeProducts); 
+productsRouter.post("/add", productsController.saveProduct);
+productsRouter.get("/:id", productsController.getProductById);
+productsRouter.delete("/:id", productsController.removeProductById);
