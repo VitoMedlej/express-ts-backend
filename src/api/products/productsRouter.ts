@@ -4,8 +4,14 @@ import { productsController } from "./productsController";
 
 export const productsRouter: Router = express.Router();
 
-// Define routes manually
-productsRouter.post("/home", productsController.getHomeProducts); 
-productsRouter.post("/add", productsController.saveProduct);
+// Public Frontend routes
+productsRouter.post("/home", productsController.fetchHomeProducts); 
 productsRouter.get("/:id", productsController.getProductById);
+
+
+// Dashboard specific routes
 productsRouter.delete("/:id", productsController.removeProductById);
+productsRouter.post("/add", productsController.saveProduct);
+
+productsRouter.get("/dashboard/fetch-products", productsController.dashboardFetch); 
+

@@ -1,17 +1,13 @@
-import {getProductById} from "./services/getProductByIdService";
-import {getHomeProducts} from "./services/getHomeProducts";
-import {addProduct} from "./services/AddProductService";
+import { getProductById } from "./services/getProductByIdService";
+import { fetchHomeProducts  } from "./services/fetchHomeProducts";
+import { addProduct } from "./services/AddProductService";
 import { removeProductById } from "./services/removeProductById";
+import { fetchDashboardProducts } from "./services/fetchDashboardProducts";
 
-export class productsService {
-
-    getHomeProducts = getHomeProducts;
-
-    addProduct = addProduct;
-
-    getProductById = getProductById;
-    
-    removeProductById= removeProductById;
-}
-
-export const ProductsService = new productsService();
+export const ProductsService = {
+    fetchHomeProducts ,
+    addProduct,
+    getProductById,
+    removeProductById,
+    fetchDashboardProducts
+};

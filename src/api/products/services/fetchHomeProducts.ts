@@ -6,7 +6,7 @@ import { Product } from "../productModel";
 import { Request } from "express";
 
 
-export async function getHomeProducts(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data:Product[]; _id: string; title: string | null; }[] | null>> {
+export async function fetchHomeProducts (req: Request): Promise<ServiceResponse<{ Sectiontype: string; data:Product[]; _id: string; title: string | null; }[] | null>> {
     const sections: { filterBy: string; value: string | null }[] = req.body || [];
   
     try {
@@ -19,7 +19,7 @@ export async function getHomeProducts(req: Request): Promise<ServiceResponse<{ S
      
       for (const section of sections) {
         let query: any = {}; 
-  
+   
         switch (section.filterBy) {
           case 'new-arrivals':
             query = {  }; 

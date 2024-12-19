@@ -4,8 +4,8 @@ import { ProductsService } from "./productsService";
 
 
 class ProductsController {
-    getHomeProducts : RequestHandler = async (req, res) => {
-        const serviceResponse = await ProductsService.getHomeProducts(req);
+    fetchHomeProducts : RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.fetchHomeProducts(req);
         return handleServiceResponse(serviceResponse, res);
     }
 
@@ -21,7 +21,11 @@ class ProductsController {
         const serviceResponse = await ProductsService.removeProductById(req.params?.id ?? null);
         return handleServiceResponse(serviceResponse, res);
     };
-
+    dashboardFetch: RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.fetchDashboardProducts(req);
+        return handleServiceResponse(serviceResponse, res);
+    };
+    
 }
 
 export const productsController = new ProductsController(); 
