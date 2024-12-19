@@ -12,6 +12,7 @@ productsRouter.get("/:id", productsController.getProductById);
 // Dashboard specific routes
 productsRouter.delete("/:id", productsController.removeProductById);
 productsRouter.post("/add", productsController.saveProduct);
+productsRouter.put("/update/:id", productsController.updateProduct);
 
 productsRouter.get("/dashboard/fetch-products", productsController.dashboardFetch); 
 

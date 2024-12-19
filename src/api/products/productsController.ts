@@ -25,6 +25,11 @@ class ProductsController {
         const serviceResponse = await ProductsService.fetchDashboardProducts(req);
         return handleServiceResponse(serviceResponse, res);
     };
+    updateProduct: RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.updateProductById(req.params.id, req.body);
+        return handleServiceResponse(serviceResponse, res);
+    };
+    
     
 }
 
