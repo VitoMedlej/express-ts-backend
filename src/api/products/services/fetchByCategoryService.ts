@@ -14,6 +14,7 @@ import { Request } from "express";
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data: Product[]; _id: string; title: string | null; }[] | null>> {
   const category: string = decodeURIComponent(req.params.category || "");
   const { search, skip = 0, limit = 12 } = req.query;
+  console.log('req.params: ', req.params);
 
   try {
     const db = await connectToDatabase();
@@ -26,7 +27,6 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
     }
 
     switch (category) {
-      case "products":
       case "collections":
         query = { ...query }; // Latest added products
         break;

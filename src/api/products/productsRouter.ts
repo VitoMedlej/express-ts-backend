@@ -6,7 +6,7 @@ export const productsRouter: Router = express.Router();
 
 // Public Frontend routes
 productsRouter.post("/home", productsController.fetchHomeProducts); 
-productsRouter.post("/shop/:category", productsController.fetchPageByCategory); 
+productsRouter.get("/shop/:category", productsController.fetchPageByCategory); 
 productsRouter.get("/:id", productsController.getProductById);
 
 
