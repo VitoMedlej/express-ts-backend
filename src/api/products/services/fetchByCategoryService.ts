@@ -4,17 +4,16 @@ import { logger } from "@/server";
 import { StatusCodes } from "http-status-codes";
 import { Product } from "../productModel";
 import { Request } from "express";
-// import { ObjectId } from "mongodb";
 
 /**
  * Fetches products dynamically based on category and query parameters.
  * @param req Express Request object containing dynamic parameters.
  * @returns ServiceResponse with product sections.
  */
-export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data: Product[]; _id: string; title: string | null; }[] | null>> {
+export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ Sectiontype: string; products: Product[]; _id: string; title: string | null; } | null>> {
   const category: string = decodeURIComponent(req.params.category || "");
   const { search, skip = 0, limit = 12 } = req.query;
-  console.log('req.params: ', req.params);
+  
 
   try {
     const db = await connectToDatabase();
@@ -22,16 +21,17 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
 
     let query: any = {};
 
-    if (search) {
+    if (search != undefined && `${search}`?.length > 2) {
       query.$text = { $search: decodeURIComponent(search as string) };
     }
 
     switch (category) {
+      case "all":
       case "collections":
-        query = { ...query }; // Latest added products
+        query = { ...query }; 
         break;
       case "new-arrivals":
-        query = { ...query, createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } }; // Last 30 days
+        query = { ...query, createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } }; 
         break;
       case "best-sellers":
         query = { ...query, bestSeller: true };
@@ -42,7 +42,7 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
 
     const rawProducts = await productsCollection
       .find(query)
-      .sort({ createdAt: -1 }) // Sort by latest added
+      .sort({ createdAt: -1 }) 
       .skip(Number(skip))
       .limit(Number(limit))
       .toArray();
@@ -51,26 +51,24 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
       return ServiceResponse.failure("No products found for the specified criteria.", null, StatusCodes.NOT_FOUND);
     }
 
-    const results = [
-      {
-        Sectiontype: category || "all",
-        data: rawProducts.map((product) => ({
-          id: product._id.toString(),
-          ...product,
-        })) as Product[],
-        _id: `section-${category || "all"}`,
-        title:
-          category === "products" || category === "collections"
-            ? "Latest Products"
-            : category === "new-arrivals"
-            ? "New Arrivals"
-            : category === "best-sellers"
-            ? "Best Sellers"
-            : category || "All Products",
-      },
-    ];
+    const result = {
+      Sectiontype: category || "all",
+      products: rawProducts.map((product) => ({
+        id: product._id.toString(),
+        ...product,
+      })) as Product[],
+      _id: `section-${category || "all"}`,
+      title:
+        category === "products" || category === "collections"
+          ? "Latest Products"
+          : category === "new-arrivals"
+          ? "New Arrivals"
+          : category === "best-sellers"
+          ? "Best Sellers"
+          : category || "All Products",
+    };
 
-    return ServiceResponse.success("Products fetched successfully.", results);
+    return ServiceResponse.success("Products fetched successfully.", result);
   } catch (error) {
     const errorMessage = `Error fetching products dynamically: ${(error as Error).message}`;
     logger.error(errorMessage);
