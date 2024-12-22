@@ -27,7 +27,7 @@ export async function getProductById(productId: string): Promise<ServiceResponse
         ...product,
       };
 
-      return ServiceResponse.success("Product fetched successfully.", formattedProduct as any);
+      return ServiceResponse.success("Product fetched successfully.", formattedProduct as Product);
     } catch (error) {
       logger.error(`Error fetching product: ${(error as Error).message}`);
       return ServiceResponse.failure(

@@ -4,6 +4,7 @@ import { addProduct } from "./services/AddProductService";
 import { removeProductById } from "./services/removeProductById";
 import { fetchDashboardProducts } from "./services/fetchDashboardProducts";
 import { updateProductById } from "./services/updateProductService";
+import { fetchByCategoryService } from "./services/fetchByCategoryService";
 
 export const ProductsService = {
     fetchHomeProducts ,
@@ -11,5 +12,6 @@ export const ProductsService = {
     getProductById,
     removeProductById,
     updateProductById,
-    fetchDashboardProducts
+    fetchDashboardProducts,
+    fetchByCategoryService
 };

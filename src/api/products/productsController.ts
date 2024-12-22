@@ -8,6 +8,10 @@ class ProductsController {
         const serviceResponse = await ProductsService.fetchHomeProducts(req);
         return handleServiceResponse(serviceResponse, res);
     }
+    fetchPageByCategory : RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.fetchByCategoryService(req);
+        return handleServiceResponse(serviceResponse, res);
+    }
 
     saveProduct : RequestHandler = async (req, res) => {
         const serviceResponse = await ProductsService.addProduct(req.body?.product ?? null);
