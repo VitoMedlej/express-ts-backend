@@ -34,6 +34,11 @@ class ProductsController {
         const serviceResponse = await ProductsService.updateProductById(req.params.id, req.body);
         return handleServiceResponse(serviceResponse, res);
     };
+
+    searchProducts: RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.searchProductService(req);
+        return handleServiceResponse(serviceResponse, res);
+    };
     
     
 }
