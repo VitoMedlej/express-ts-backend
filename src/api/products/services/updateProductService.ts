@@ -27,7 +27,7 @@ export async function updateProductById(id: string, updateData: Record<string, a
       return ServiceResponse.failure("Update data is required.", null, StatusCodes.BAD_REQUEST);
     }
 
-    const db = await connectToDatabase();
+    const db = await connectToDatabase(`admin`);
     const productsCollection = await getCollection(db, "Products");
 
     const result = await productsCollection.updateOne(

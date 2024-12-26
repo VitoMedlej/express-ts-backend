@@ -1,35 +1,44 @@
 import { Product } from "@/api/products/productModel";
 import { User } from "@/api/user/userModel";
-import { MongoClient, Db, Collection, WithId } from "mongodb";
+import { MongoClient, Db, WithId } from "mongodb";
 
-const MONGODB_CONNECTION = process.env.MONGODB_CONNECTION;
-const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
 
 let client: MongoClient | null = null;
 let database: Db | null = null;
 
 
-export const connectToDatabase = async (): Promise<Db> => {
-    if (database) {
-        return database; // Return existing database instance
-    }
+const MONGODB_CONNECTION_ADMIN = process.env.MONGODB_CONNECTION_ADMIN;
+const MONGODB_CONNECTION_READONLY = process.env.MONGODB_CONNECTION_READONLY;
+const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
 
-    if (!MONGODB_CONNECTION) {
-        throw new Error("MongoDB URI is not defined in environment variables.");
-    }
+let adminClient: MongoClient | null = null;
+let readOnlyClient: MongoClient | null = null;
 
-    try {
-        client = new MongoClient(MONGODB_CONNECTION);
-        await client.connect();
-        database = client.db(MONGO_DB_NAME);
-        console.log(`Connected to MongoDB: ${MONGO_DB_NAME}`);
-        return database;
-    } catch (error) {
-        console.error("Error connecting to MongoDB:", error);
-        throw new Error("Failed to connect to MongoDB.");
-    }
+export const connectToDatabase = async (access: "admin" | "readonly"): Promise<Db> => {
+  const connectionString =
+    access === "admin" ? MONGODB_CONNECTION_ADMIN : MONGODB_CONNECTION_READONLY;
+
+  if (!connectionString) {
+    throw new Error("MongoDB connection string is missing.");
+  }
+
+  const client = access === "admin" ? adminClient : readOnlyClient;
+
+  if (client) {
+    return client.db(MONGO_DB_NAME);
+  }
+
+  const newClient = new MongoClient(connectionString);
+  await newClient.connect();
+
+  if (access === "admin") {
+    adminClient = newClient;
+  } else {
+    readOnlyClient = newClient;
+  }
+
+  return newClient.db(MONGO_DB_NAME);
 };
-
 
 
 // 1. Define your MongoDB model mappings centrally

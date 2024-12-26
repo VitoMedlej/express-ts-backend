@@ -15,7 +15,7 @@ export async function fetchDashboardProducts(req: Request): Promise<ServiceRespo
   const parsedLimit = parseInt(limit as string, 10) || DEFAULT_LIMIT;
 
   try {
-    const db = await connectToDatabase();
+    const db = await connectToDatabase(`admin`);
     const productsCollection = await getCollection(db, "Products");
 
     let query: any = {};

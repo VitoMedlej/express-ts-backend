@@ -21,7 +21,7 @@ export async function removeProductById(id: string): Promise<ServiceResponse<nul
       return ServiceResponse.failure("Invalid product ID.", null, StatusCodes.BAD_REQUEST);
     }
 
-    const db = await connectToDatabase();
+    const db = await connectToDatabase(`admin`);
     const productsCollection = await getCollection(db, "Products");
 
     const result = await productsCollection.deleteOne({ _id: new ObjectId(id) });

@@ -10,7 +10,7 @@ export async function fetchHomeProducts (req: Request): Promise<ServiceResponse<
     const sections: { filterBy: string; value: string | null }[] = req.body || [];
   
     try {
-      const db = await connectToDatabase();
+      const db = await connectToDatabase(`readonly`);
       const productsCollection = await getCollection(db, "Products");
   
      

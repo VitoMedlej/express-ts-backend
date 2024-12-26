@@ -11,7 +11,7 @@ import { Request } from "express";
  * @returns Count of matching products.
  */
 async function getTotalCount(query: any): Promise<number> {
-  const db = await connectToDatabase();
+  const db = await connectToDatabase(`readonly`);
   const productsCollection = await getCollection(db, "Products");
   return productsCollection.countDocuments(query);
 }
@@ -27,7 +27,7 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
   console.log('req.params: ', req.params);
 
   try {
-    const db = await connectToDatabase();
+    const db = await connectToDatabase(`readonly`);
     const productsCollection = await getCollection(db, "Products");
 
     let query: any = {};

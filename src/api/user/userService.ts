@@ -14,7 +14,7 @@ export class UserService {
      */
     async findById(id : string) : Promise < ServiceResponse < User | null >> {
         try {
-            const db = await connectToDatabase();
+            const db = await connectToDatabase(`admin`);
             const usersCollection = await getCollection(db, this.collectionName);
 
             const user = await usersCollection.findOne({_id: new ObjectId(id)});
