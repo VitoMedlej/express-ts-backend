@@ -7,19 +7,18 @@ let client: MongoClient | null = null;
 let database: Db | null = null;
 
 
-const MONGODB_CONNECTION_ADMIN = process.env.MONGODB_CONNECTION_ADMIN;
-const MONGODB_CONNECTION_READONLY = process.env.MONGODB_CONNECTION_READONLY;
-const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
 
-console.log('MONGO_DB_NAME: ', MONGO_DB_NAME);
-console.log('MONGODB_CONNECTION_ADMIN: ', MONGODB_CONNECTION_ADMIN);
-console.log('MONGODB_CONNECTION_READONLY: ', MONGODB_CONNECTION_READONLY);
 let adminClient: MongoClient | null = null;
 let readOnlyClient: MongoClient | null = null;
 
 export const connectToDatabase = async (access: "admin" | "readonly"): Promise<Db> => {
+  const MONGODB_CONNECTION = process.env.MONGODB_CONNECTION;
+  const MONGODB_CONNECTION_READONLY = process.env.MONGODB_CONNECTION_READONLY;
+  const MONGO_DB_NAME = process.env.MONGO_DB_NAME;
   const connectionString =
-  access === "admin" ? MONGODB_CONNECTION_ADMIN : MONGODB_CONNECTION_READONLY;
+  access === "admin" ? MONGODB_CONNECTION : MONGODB_CONNECTION_READONLY;
+  console.log('MONGODB_CONNECTION_READONLY: ', MONGODB_CONNECTION_READONLY);
+  console.log('MONGODB_CONNECTION: ', MONGODB_CONNECTION);
   
   console.log('connectionString: ', connectionString);
   if (!connectionString) {
