@@ -1,0 +1,28 @@
+name: Deploy Express API
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: SSH into server and deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no heefbirelp@millionairebia.com << 'EOF'
+            cd /home/heefbirelp/source
+            git pull origin main  # Assuming you're using git to manage your code
+            npm install           # Install any new dependencies
+            pm2 restart app_name  # Restart your app (if using pm2 or another process manager)
+          EOF

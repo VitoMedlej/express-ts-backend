@@ -8,7 +8,7 @@ export const productsRouter: Router = express.Router();
 productsRouter.post("/home", productsController.fetchHomeProducts); 
 productsRouter.get("/search", productsController.searchProducts); 
 productsRouter.get("/shop/:category", productsController.fetchPageByCategory); 
-productsRouter.get("/:id", productsController.getProductById);
+productsRouter.get("/get-item/:id", productsController.getProductById);
 
 
 // Dashboard specific routes
