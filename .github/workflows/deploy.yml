@@ -1,29 +1,25 @@
-name: Deploy Express API
+name: Test Secrets
 
 on:
   push:
     branches:
-      - master
+      - master  # Trigger this on push to the main branch
 
 jobs:
-  deploy:
+  test-secrets:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up SSH agent
+      - name: Echo secrets for debugging
         run: |
-          eval "$(ssh-agent -s)"  # Start the SSH agent
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -  # Provide the passphrase to unlock the key
+          echo "Testing SSH_PRIVATE_KEY"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}"  # This will echo the SSH private key (be cautious)
 
-      - name: SSH into server and deploy
-        run: |
-          ssh -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
-            cd /home/heefbirelp/express-ts-backend || exit
-            git pull origin master
-            npm install --production
-            pm2 start dist/index.js --name express-ts-backend
-          EOF
+          echo "Testing SSH_PASSPHRASE"
+          echo "${{ secrets.SSH_PASSPHRASE }}"  # This will echo the SSH passphrase (be cautious)
+
+          echo "Testing Other Secret"
+          echo "${{ secrets.YOUR_OTHER_SECRET }}"  # Replace with any other secret you'd like to test
