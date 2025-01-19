@@ -22,7 +22,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "envalid": "^8.0.0",
-    "tsup": "^8.3.5",
     "express": "^4.19.2",
     "express-rate-limit": "^7.2.0",
     "helmet": "^8.0.0",
@@ -31,7 +30,9 @@
     "mongodb": "^6.11.0",
     "pino": "^9.4.0",
     "pino-http": "^10.0.0",
+    "pm2": "^5.4.3",
     "swagger-ui-express": "^5.0.0",
+    "tsup": "^8.3.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {

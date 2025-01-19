@@ -20,9 +20,9 @@ jobs:
 
       - name: SSH into server and deploy
         run: |
-          ssh -o StrictHostKeyChecking=no heefbirelp@millionairebia.com << 'EOF'
-            cd /home/heefbirelp/source
-            git pull origin main  # Assuming you're using git to manage your code
+          ssh -o StrictHostKeyChecking=no   -p 21098  heefbirelp@millionairebia.com << 'EOF'
+            cd /home/heefbirelp/express-ts-backend
+            git pull origin master  # Assuming you're using git to manage your code
             npm install           # Install any new dependencies
-            pm2 restart app_name  # Restart your app (if using pm2 or another process manager)
+            pm2 start dist/index.js --name express-ts-backend
           EOF
