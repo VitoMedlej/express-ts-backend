@@ -12,11 +12,21 @@ productsRouter.get("/search", productsController.searchProducts);
 productsRouter.get("/shop/:category", productsController.fetchPageByCategory); 
 productsRouter.get("/get-item/:id", productsController.getProductById);
 
-productsRouter.get("/test",async (req, res)=> {
-    console.log('test: ');
+productsRouter.get("/test", async (req, res) => {
+    console.time("total");
+    console.time("middleware");
+    // Simulate middleware timing
+    console.timeEnd("middleware");
 
-        // const productsCollection = await getCollection(db, "Products");
-    return handleServiceResponse(ServiceResponse.success("Product removed successfully.", true), res);
+    console.time("handler");
+    const response = ServiceResponse.success("Product removed successfully.", true);
+    console.timeEnd("handler");
+
+    console.time("serialization");
+    handleServiceResponse(response, res);
+    console.timeEnd("serialization");
+
+    console.timeEnd("total");
 });
 
 // Dashboard specific routes
