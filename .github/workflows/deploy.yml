@@ -18,6 +18,10 @@ jobs:
           eval "$(ssh-agent -s)"  # Start the SSH agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
 
+      - name: Provide SSH Passphrase
+        run: |
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -  # Automatically provide passphrase
+
       - name: SSH into server and deploy
         run: |
           ssh -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
