@@ -9,7 +9,7 @@ class ProductsController {
         return handleServiceResponse(serviceResponse, res);
     }
     fetchPageByCategory : RequestHandler = async (req, res) => {
-        console.log('req: ', req);
+      
         const serviceResponse = await ProductsService.fetchByCategoryService(req);
         return handleServiceResponse(serviceResponse, res);
     }

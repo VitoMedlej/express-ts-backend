@@ -13,8 +13,8 @@ export async function getProductById(productId: string): Promise<ServiceResponse
         return ServiceResponse.failure("Invalid product ID.", null, StatusCodes.BAD_REQUEST);
       }
 
-      const db = await connectToDatabase(`readonly`);
-      const productsCollection = await getCollection(db, "Products");
+      const productsCollection = await getCollection("Products");
+
 
       const product = await productsCollection.findOne({ _id: new ObjectId(productId) });
 

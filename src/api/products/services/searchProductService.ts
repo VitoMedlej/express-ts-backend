@@ -16,8 +16,8 @@ export async function searchProductService(req: Request): Promise<ServiceRespons
   }
 
   try {
-    const db = await connectToDatabase(`readonly`);
-    const productsCollection = await getCollection(db, "Products");
+    const productsCollection = await getCollection("Products");
+
 
     const results = await productsCollection
       .find({

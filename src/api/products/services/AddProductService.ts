@@ -14,8 +14,7 @@ export async function addProduct(newProduct: Product): Promise<ServiceResponse<n
         return ServiceResponse.failure("Missing required fields.", null, StatusCodes.BAD_REQUEST);
       }
 
-      const db = await connectToDatabase(`admin`);
-      const productsCollection = await getCollection(db, "Products");
+      const productsCollection = await getCollection("Products");
       const sanitizedData = sanitizeProductPayload(newProduct);
       const documentToInsert = {
         ...sanitizedData,

@@ -12,6 +12,7 @@ import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 import authenticateRequest from "./common/middleware/authHandler";
 import { productsRouter } from "./api/products/productsRouter";
+import { connectToDatabase } from "./database/mongodbClient";
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -45,6 +46,19 @@ app.use(rateLimiter);
 app.use(authenticateRequest)
 // Request logging
 app.use(requestLogger);
+
+
+
+// connect to db
+connectToDatabase()
+  .then(() => {
+    console.log("MongoDB connection established.");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process if DB connection fails
+  });
+
 
 // Routes
 app.use("/health-check", healthCheckRouter);

@@ -1,5 +1,5 @@
 import { ServiceResponse } from "@/common/models/serviceResponse";
-import { connectToDatabase, getCollection } from "@/database/mongodbClient";
+import { getCollection } from "@/database/mongodbClient";
 import { logger } from "@/server";
 import { StatusCodes } from "http-status-codes";
 import { Product } from "../productModel";
@@ -11,8 +11,7 @@ import { Request } from "express";
  * @returns Count of matching products.
  */
 async function getTotalCount(query: any): Promise<number> {
-  const db = await connectToDatabase(`readonly`);
-  const productsCollection = await getCollection(db, "Products");
+  const productsCollection = await getCollection("Products");
   return productsCollection.countDocuments(query);
 }
 
@@ -24,21 +23,20 @@ async function getTotalCount(query: any): Promise<number> {
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ products: Product[]; title: string | null; count: number; } | null>> {
   const category: string = decodeURIComponent(req.params.category || "");
   const { search, skip = 0, limit = 12 } = req.query;
-  console.log('req.params: ', req.params);
 
   try {
-    const db = await connectToDatabase(`readonly`);
-    const productsCollection = await getCollection(db, "Products");
+    const productsCollection = await getCollection("Products");
 
     let query: any = {};
 
-    console.log('search !: ', search);
     if (search != undefined && `${search}`?.length > 2) {
       query.$text = { $search: decodeURIComponent(search as string) };
     }
 
     switch (category) {
       case "all":
+      case "collection":
+      case "products":
       case "collections":
         query = { ...query }; // Latest added products
         break;

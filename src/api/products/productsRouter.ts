@@ -1,6 +1,8 @@
 import express, { type Router } from "express";
-import { validateRequest } from "@/common/utils/httpHandlers";
+import { handleServiceResponse, validateRequest } from "@/common/utils/httpHandlers";
 import { productsController } from "./productsController";
+import { ServiceResponse } from "@/common/models/serviceResponse";
+import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 
 export const productsRouter: Router = express.Router();
 
@@ -8,7 +10,13 @@ export const productsRouter: Router = express.Router();
 productsRouter.post("/home", productsController.fetchHomeProducts); 
 productsRouter.get("/search", productsController.searchProducts); 
 productsRouter.get("/shop/:category", productsController.fetchPageByCategory); 
-productsRouter.get("/:id", productsController.getProductById);
+productsRouter.get("/item/:id", productsController.getProductById);
+productsRouter.get("/test",async (req, res)=> {
+    console.log('test: ');
+
+        // const productsCollection = await getCollection(db, "Products");
+    return handleServiceResponse(ServiceResponse.success("Product removed successfully.", true), res);
+});
 
 
 // Dashboard specific routes
