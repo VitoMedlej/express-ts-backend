@@ -17,10 +17,7 @@ jobs:
         run: |
           eval "$(ssh-agent -s)"  # Start the SSH agent
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
-
-      - name: Provide SSH Passphrase
-        run: |
-          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -  # Automatically provide passphrase
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add -  # Provide the passphrase to unlock the key
 
       - name: SSH into server and deploy
         run: |
