@@ -3,7 +3,7 @@ name: Deploy Express API
 on:
   push:
     branches:
-      - master  # Trigger deployment on push to the main branch
+      - master
 
 jobs:
   deploy:
@@ -13,16 +13,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Set up SSH agent
+        run: |
+          eval "$(ssh-agent -s)"  # Start the SSH agent
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
 
       - name: SSH into server and deploy
         run: |
-          ssh -o StrictHostKeyChecking=no   -p 21098  heefbirelp@millionairebia.com << 'EOF'
-            cd /home/heefbirelp/express-ts-backend
-            git pull origin master  # Assuming you're using git to manage your code
-            npm install           # Install any new dependencies
+          ssh -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
+            cd /home/heefbirelp/express-ts-backend || exit
+            git pull origin master
+            npm install --production
             pm2 start dist/index.js --name express-ts-backend
           EOF
