@@ -23,7 +23,7 @@ jobs:
       - name: SSH into server and install dependencies
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
-            cd /home/heefbirelp/express-ts-backend
+            cd express-ts-backend
             git pull origin master
             npm install  # This will install the necessary dependencies
           EOF
@@ -31,6 +31,6 @@ jobs:
       - name: SSH into server and start the app with PM2
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
-            cd /home/heefbirelp/express-ts-backend
+            cd express-ts-backend
             npm run start  # Running the start script to begin the app
           EOF
