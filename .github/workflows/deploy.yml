@@ -8,29 +8,21 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 21098 millionairebia.com >> ~/.ssh/known_hosts
+      - name: Set up SSH key for deploy
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: SSH into server and install dependencies
+      - name: SSH into server and deploy
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
-            cd express-ts-backend
+            cd /home/heefbirelp/express-ts-backend
             git pull origin master
-            npm install  # This will install the necessary dependencies
-          EOF
-
-      - name: SSH into server and start the app with PM2
-        run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
-            cd express-ts-backend
-            npm run start  # Running the start script to begin the app
+            npm install
+            pm2 stop express-ts-backend || true # Stops the process if it's running
+            pm2 start dist/index.js --name "express-ts-backend" # Start the app with pm2
           EOF
