@@ -17,7 +17,7 @@ productsRouter.get("/test", async (req, res) => {
     console.time("middleware");
     // Simulate middleware timing
     console.timeEnd("middleware");
-
+    connectToDatabase()
     console.time("handler");
     const response = ServiceResponse.success("Product removed successfully.", true);
     console.timeEnd("handler");
