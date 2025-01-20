@@ -50,14 +50,14 @@ app.use(requestLogger);
 
 
 // connect to db
-// connectToDatabase()
-//   .then(() => {
-//     console.log("MongoDB connection established.");
-//   })
-//   .catch((error) => {
-//     console.error("Error connecting to MongoDB:", error);
-//     process.exit(1); // Exit the process if DB connection fails
-//   });
+connectToDatabase()
+  .then(() => {
+    console.log("MongoDB connection established.");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process if DB connection fails
+  });
 
 
 // Routes
