@@ -20,11 +20,17 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 21098 millionairebia.com >> ~/.ssh/known_hosts
 
-      - name: SSH into server and deploy
+      - name: SSH into server and install dependencies
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
             cd /home/heefbirelp/express-ts-backend
             git pull origin master
-            npm install
-            pm2 restart express-ts-backend
+            npm install  # This will install the necessary dependencies
+          EOF
+
+      - name: SSH into server and start the app with PM2
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
+            cd /home/heefbirelp/express-ts-backend
+            npm run start  # Running the start script to begin the app
           EOF
