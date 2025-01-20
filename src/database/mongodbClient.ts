@@ -21,11 +21,13 @@ const connectToDatabase = async (): Promise<Db> => {
     if (!connectionString) {
       throw new Error("MongoDB connection string is missing.");
     }
-
+    console.time('DB-start')
     mongoClient = new MongoClient(connectionString, { maxPoolSize: 100, minPoolSize: 1 });
     await mongoClient.connect();
     db = mongoClient.db(process.env.MONGO_DB_NAME);
+    console.timeEnd('DB-start')
     console.log("MongoDB connection established.");
+    
   }
 
   return db!;
