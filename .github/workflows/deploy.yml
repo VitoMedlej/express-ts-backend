@@ -13,14 +13,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up SSH Agent
+      - name: Set up SSH
         run: |
-          eval "$(ssh-agent -s)"  # Start the SSH agent
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -  # Add the private key to the agent
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 21098 millionairebia.com >> ~/.ssh/known_hosts
 
       - name: SSH into server and deploy
         run: |
-          ssh -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
             cd /home/heefbirelp/express-ts-backend
             git pull origin master
             npm install
