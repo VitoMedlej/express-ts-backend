@@ -24,6 +24,6 @@ jobs:
             git pull 
             npm install
             npm run build
-            pm2 stop express-ts-backend || true # Stops the process if it's running
-            pm2 start dist/index.js --name "express-ts-backend" # Start the app with pm2
+            # pm2 stop express-ts-backend || true # Stops the process if it's running
+            # pm2 start dist/index.js --name "express-ts-backend" # Start the app with pm2
           EOF
