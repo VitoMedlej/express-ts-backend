@@ -18,7 +18,7 @@ productsRouter.get("/test", async (req, res) => {
     // Simulate middleware timing
     console.timeEnd("middleware");
     console.time("handler");
-    const response = ServiceResponse.success("Test 1 ran", true);
+    const response = ServiceResponse.success("Test 1 ran final", true);
     console.timeEnd("handler");
 
     console.time("serialization");
