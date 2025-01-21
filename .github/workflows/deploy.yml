@@ -19,8 +19,8 @@ jobs:
 
       - name: SSH into server and deploy
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 heefbirelp@millionairebia.com << 'EOF'
-            cd /home/heefbirelp/express-api
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 qylmxibqny@millionairebia.com << 'EOF'
+            cd /home/qylmxibqny/express-api
             git pull origin master
             npm install
             pm2 stop express-ts-backend || true # Stops the process if it's running

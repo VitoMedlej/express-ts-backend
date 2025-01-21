@@ -18,7 +18,7 @@ productsRouter.get("/test", async (req, res) => {
     // Simulate middleware timing
     console.timeEnd("middleware");
     console.time("handler");
-    const response = ServiceResponse.success("Product removed successfully.", true);
+    const response = ServiceResponse.success("Test ran", true);
     console.timeEnd("handler");
 
     console.time("serialization");
@@ -27,6 +27,8 @@ productsRouter.get("/test", async (req, res) => {
 
     console.timeEnd("total");
 });
+
+
 
 // Dashboard specific routes
 productsRouter.delete("/dashboard/:id", productsController.removeProductById);

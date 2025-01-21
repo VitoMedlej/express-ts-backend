@@ -1,5 +1,5 @@
 import { ServiceResponse } from "@/common/models/serviceResponse";
-import { getCollection } from "@/database/mongodbClient";
+import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 import { logger } from "@/server";
 import { StatusCodes } from "http-status-codes";
 import { Product } from "../productModel";
@@ -25,6 +25,8 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
   const { search, skip = 0, limit = 12 } = req.query;
 
   try {
+    await connectToDatabase()
+    
     const productsCollection = await getCollection("Products");
 
     let query: any = {};
