@@ -21,7 +21,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 qylmxibqny@millionairebia.com << 'EOF'
             cd /home/qylmxibqny/express-api
-            git pull origin master
+            git pull 
             npm install
             npm run build
             pm2 stop express-ts-backend || true # Stops the process if it's running
