@@ -13,6 +13,10 @@ import { env } from "@/common/utils/envConfig";
 import authenticateRequest from "./common/middleware/authHandler";
 import { productsRouter } from "./api/products/productsRouter";
 // import { connectToDatabase } from "./database/mongodbClient";
+const morgan = require('morgan');
+const fs = require('fs');
+
+
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -24,6 +28,15 @@ const allowedOrigins = [
 
 // Set the application to trust the reverse proxy
 app.set("trust proxy", true);
+
+
+// Logs
+const logStream = fs.createWriteStream('access.log', { flags: 'a' });
+app.use(morgan('combined', { stream: logStream })); // Logs to file
+
+// Also log to console
+app.use(morgan('dev')); // Logs to console in 'dev' format
+
 
 // Middlewares
 app.use(express.json());

@@ -28,6 +28,22 @@ productsRouter.get("/test", async (req, res) => {
     console.timeEnd("total");
 });
 
+productsRouter.get("/test2", async (req, res) => {
+    console.time("total");
+    console.time("middleware");
+    // Simulate middleware timing
+    console.timeEnd("middleware");
+    console.time("handler");
+    const response = ServiceResponse.success("Test 2 ran", true);
+    console.timeEnd("handler");
+
+    console.time("serialization");
+    handleServiceResponse(response, res);
+    console.timeEnd("serialization");
+
+    console.timeEnd("total");
+});
+
 
 
 // Dashboard specific routes
