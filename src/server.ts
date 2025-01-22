@@ -31,7 +31,7 @@ app.set("trust proxy", true);
 
 
 // Create a writable stream for logging to a file
-const logFilePath = path.join(__dirname, "logs", "access.log");
+const logFilePath = path.join(__dirname, "logs", "combined.log");
 const logDir = path.dirname(logFilePath);
 
 // Ensure the logs directory exists
@@ -39,12 +39,16 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
-// Create the write stream
 const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
 
-// Log both to a file and the console
-app.use(morgan("combined", { stream: logStream })); // Logs to file in 'combined' format
-app.use(morgan("dev")); // Logs to console in 'dev' format
+const originalConsoleLog = console.log;
+console.log = (...args) => {
+  originalConsoleLog(...args);
+  logStream.write(args.map(String).join(" ") + "\n");
+};
+
+// Log HTTP requests using Morgan
+app.use(morgan("combined", { stream: logStream })); // Logs HTTP requests to the same file
 
 console.log(`Logs will be saved to: ${logFilePath}`);
 
