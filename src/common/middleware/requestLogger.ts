@@ -26,7 +26,7 @@ type PinoCustomProps = {
 
 const requestLogger = (options?: Options): RequestHandler[] => {
   const pinoOptions: Options = {
-    enabled: env.isProduction,
+    enabled: env.isProd,
     customProps: customProps as unknown as Options["customProps"],
     redact: [],
     genReqId,
@@ -55,7 +55,7 @@ const customProps = (req: Request, res: Response): PinoCustomProps => ({
 });
 
 const responseBodyMiddleware: RequestHandler = (_req, res, next) => {
-  const isNotProduction = !env.isProduction;
+  const isNotProduction = !env.isProd;
   if (isNotProduction) {
     const originalSend = res.send;
     res.send = (content) => {

@@ -13,9 +13,9 @@ import { env } from "@/common/utils/envConfig";
 import authenticateRequest from "./common/middleware/authHandler";
 import { productsRouter } from "./api/products/productsRouter";
 // import { connectToDatabase } from "./database/mongodbClient";
+import path from "path";
 const morgan = require('morgan');
 const fs = require('fs');
-
 
 
 const logger = pino({ name: "server start" });
@@ -30,12 +30,23 @@ const allowedOrigins = [
 app.set("trust proxy", true);
 
 
-// Logs
-const logStream = fs.createWriteStream('access.log', { flags: 'a' });
-app.use(morgan('combined', { stream: logStream })); // Logs to file
+// Create a writable stream for logging to a file
+const logFilePath = path.join(__dirname, "logs", "access.log");
+const logDir = path.dirname(logFilePath);
 
-// Also log to console
-app.use(morgan('dev')); // Logs to console in 'dev' format
+// Ensure the logs directory exists
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir, { recursive: true });
+}
+
+// Create the write stream
+const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
+
+// Log both to a file and the console
+app.use(morgan("combined", { stream: logStream })); // Logs to file in 'combined' format
+app.use(morgan("dev")); // Logs to console in 'dev' format
+
+console.log(`Logs will be saved to: ${logFilePath}`);
 
 
 // Middlewares

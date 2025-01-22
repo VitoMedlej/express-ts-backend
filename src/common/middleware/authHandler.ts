@@ -7,9 +7,9 @@ import jwt from "jsonwebtoken";
 
 const authenticateRequest : RequestHandler = (req, res, next) => {
     const jwtSecret = env.JWT_SECRET;
-    const isProduction = Boolean(env.NODE_ENV == 'production');
+    const isProd = Boolean(env.NODE_ENV == 'production');
     
-//     if (isProduction == true)
+//     if (isProd == true)
         
         
 //         {
