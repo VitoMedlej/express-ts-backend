@@ -3,10 +3,10 @@ import { handleServiceResponse, validateRequest } from "@/common/utils/httpHandl
 import { dashboardController } from "./dashboardController";
 import { ServiceResponse } from "@/common/models/serviceResponse";
 
-export const DashboardRouter: Router = express.Router();
+export const dashboardRouter: Router = express.Router();
 
 // Dashboard specific routes
-DashboardRouter.post("/auth/login", dashboardController.authenticate); 
+dashboardRouter.post("/auth/login", dashboardController.authenticate); 
 // DashboardRouter.delete("/:id", DashboardController.removeProductById);
 // DashboardRouter.post("/add", DashboardController.saveProduct);
 // DashboardRouter.put("/update/:id", DashboardController.updateProduct);

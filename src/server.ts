@@ -14,7 +14,7 @@ import { productsRouter } from "./api/products/productsRouter";
 // import { connectToDatabase } from "./database/mongodbClient";
 import path from "path";
 import { connectToDatabase } from "./database/mongodbClient";
-import { DashboardRouter } from "./api/dashboard/dashboardRouter";
+import { dashboardRouter } from "./api/dashboard/dashboardRouter";
 const morgan = require('morgan');
 const fs = require('fs');
 
@@ -23,6 +23,7 @@ const logger = pino({ name: "server start" });
 const app: Express = express();
 
 const allowedOrigins = [
+    'http://localhost:8080/',
     'https://millionairebia.com/',
   ];
 
@@ -60,7 +61,7 @@ app.use(
     cors({
       origin: function (origin, callback) {
        
-        if (!origin || allowedOrigins.includes(origin)) {
+        if ( process.env.NODE_ENV === 'development' ||  !origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
           callback(new Error('Not allowed by CORS'));
@@ -90,7 +91,7 @@ connectToDatabase()
 app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
 app.use("/products", productsRouter);
-app.use("/dashboard", DashboardRouter);
+app.use("/dashboard", dashboardRouter);
 
 // Swagger UI
 app.use(openAPIRouter);

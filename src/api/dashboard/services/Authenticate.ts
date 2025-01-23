@@ -15,9 +15,9 @@ export async function Authenticate(user: User): Promise<ServiceResponse<{ user:
         role: any;
     }
     ; token: string } | null>> {
-    const { id, email, password, role } = user;
-
-    try {
+        
+        try {
+            const { id, email, password, role } = user;
         if (!user || !email || !id || !password || !ObjectId.isValid(id)) {
             logger.warn("Invalid email or user ID.");
             return ServiceResponse.failure("Invalid email or user ID.", null, StatusCodes.BAD_REQUEST);
