@@ -2,7 +2,6 @@ import express, { type Router } from "express";
 import { handleServiceResponse, validateRequest } from "@/common/utils/httpHandlers";
 import { productsController } from "./productsController";
 import { ServiceResponse } from "@/common/models/serviceResponse";
-import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 
 export const productsRouter: Router = express.Router();
 

@@ -9,11 +9,12 @@ import { userRouter } from "@/api/user/userRouter";
 import errorHandler from "@/common/middleware/errorHandler";
 import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
-import { env } from "@/common/utils/envConfig";
 import authenticateRequest from "./common/middleware/authHandler";
 import { productsRouter } from "./api/products/productsRouter";
 // import { connectToDatabase } from "./database/mongodbClient";
 import path from "path";
+import { connectToDatabase } from "./database/mongodbClient";
+import { DashboardRouter } from "./api/dashboard/dashboardRouter";
 const morgan = require('morgan');
 const fs = require('fs');
 
@@ -22,8 +23,7 @@ const logger = pino({ name: "server start" });
 const app: Express = express();
 
 const allowedOrigins = [
-    'https://ecommerce-dashboard-template.vercel.app',
-    `https://ecom-template-roan.vercel.app/`
+    'https://millionairebia.com/',
   ];
 
 // Set the application to trust the reverse proxy
@@ -48,7 +48,7 @@ console.log = (...args) => {
 };
 
 // Log HTTP requests using Morgan
-app.use(morgan("combined", { stream: logStream })); // Logs HTTP requests to the same file
+app.use(morgan("combined", { stream: logStream }));
 
 console.log(`Logs will be saved to: ${logFilePath}`);
 
@@ -75,23 +75,22 @@ app.use(authenticateRequest)
 // Request logging
 app.use(requestLogger);
 
-
-
 // connect to db
-// connectToDatabase()
-//   .then(() => {
-//     console.log("MongoDB connection established.");
-//   })
-//   .catch((error) => {
-//     console.error("Error connecting to MongoDB:", error);
-//     process.exit(1); // Exit the process if DB connection fails
-//   });
+connectToDatabase()
+  .then(() => {
+    console.log("MongoDB connection established.");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process if DB connection fails
+  });
 
 
 // Routes
 app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
 app.use("/products", productsRouter);
+app.use("/dashboard", DashboardRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
