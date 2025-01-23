@@ -59,7 +59,8 @@ export async function Authenticate(user: User): Promise<ServiceResponse<{ user:
 
         return ServiceResponse.success("User authenticated successfully.", { user: authenticatedUser, token });
     } catch (error) {
-        logger.error(`Error authenticating user: ${(error as Error).message}`);
+        // logger.error(`Error authenticating user: ${(error as Error).message}`);
+        console.log('`Error authenticating user:  ', `Error authenticating user: ${error}`);
         return ServiceResponse.failure(
             "An error occurred while authenticating the user.",
             null,
