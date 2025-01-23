@@ -3,7 +3,7 @@ import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 import { logger } from "@/server";
 import { StatusCodes } from "http-status-codes";
 import { Request } from "express";
-import { Product } from "../productModel";
+import { Product } from "../../products/productModel";
 
 // Pagination constants
 const DEFAULT_PAGE = 1;

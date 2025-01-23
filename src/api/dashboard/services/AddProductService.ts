@@ -3,8 +3,8 @@ import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 import { logger } from "@/server";
 import { StatusCodes } from "http-status-codes";
 import { ObjectId } from "mongodb";
-import { Product } from "../productModel";
 import { sanitizeProductPayload } from "@/common/utils/sanitizeProductPayload";
+import { Product } from "@/api/products/productModel";
 
 export async function addProduct(newProduct: Product): Promise<ServiceResponse<null | string>> {
     try {

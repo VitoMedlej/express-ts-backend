@@ -13,3 +13,9 @@ dashboardRouter.post("/auth/login", dashboardController.authenticate);
 
 // DashboardRouter.get("/fetch-Dashboard", DashboardController.dashboardFetch); 
 
+// Dashboard specific routes
+dashboardRouter.delete("/delete/:id", dashboardController.removeProductById);
+dashboardRouter.post("/product/add", dashboardController.saveProduct);
+dashboardRouter.put("/product/update/:id", dashboardController.updateProduct);
+
+dashboardRouter.get("/fetch-products", dashboardController.dashboardFetch); 

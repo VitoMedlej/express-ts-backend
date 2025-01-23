@@ -45,10 +45,5 @@ productsRouter.get("/test2", async (req, res) => {
 
 
 
-// Dashboard specific routes
-productsRouter.delete("/dashboard/:id", productsController.removeProductById);
-productsRouter.post("/dashboard/add", productsController.saveProduct);
-productsRouter.put("/dashboard/update/:id", productsController.updateProduct);
 
-productsRouter.get("/dashboard/fetch-products", productsController.dashboardFetch); 
 
