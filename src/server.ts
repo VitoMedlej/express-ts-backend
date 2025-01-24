@@ -24,6 +24,8 @@ const app: Express = express();
 
 const allowedOrigins = [
     'http://localhost:8080/',
+    'http://localhost:3000/',
+    `https://ecommerce-dashboard-template.vercel.app/`,
     'https://millionairebia.com/',
   ];
 
@@ -94,7 +96,7 @@ app.use("/products", productsRouter);
 app.use("/dashboard", dashboardRouter);
 
 // Swagger UI
-app.use(openAPIRouter);
+// app.use(openAPIRouter);
 
 // Error handlers
 app.use(errorHandler());
