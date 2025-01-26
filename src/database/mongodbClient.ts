@@ -2,11 +2,13 @@ import { MongoClient, Db, WithId } from "mongodb";
 import { Product } from "@/api/products/productModel";
 import { User } from "@/api/user/userModel";
 import { Admin } from "@/api/dashboard/dashboardModel";
+import { OrderData } from "@/common/models/orderModel";
 
 type MongoDBModels = {
   Products: Product;
   Users: User;
   Admins : Admin;
+  Orders: OrderData;
 };
 
 type MongoDocument<T> = WithId<Document> & Partial<Record<keyof T, any>>;

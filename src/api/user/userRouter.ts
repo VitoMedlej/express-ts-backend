@@ -29,4 +29,10 @@ userRegistry.registerPath({
   responses: createApiResponse(UserSchema, "Success"),
 });
 
+
+
+
+
+
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUser);
+

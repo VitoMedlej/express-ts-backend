@@ -19,22 +19,13 @@ const morgan = require('morgan');
 const fs = require('fs');
 
 
-const logger = pino({ name: "server start" });
+
+
 const app: Express = express();
 
-const allowedOrigins = [
-    'http://localhost:8080/',
-    'http://localhost:3000/',
-    `https://ecommerce-dashboard-template.vercel.app/`,
-    'https://millionairebia.com/',
-  ];
-
-// Set the application to trust the reverse proxy
-app.set("trust proxy", true);
-
-
-// Create a writable stream for logging to a file
+// Configure Pino Logger
 const logFilePath = path.join(__dirname, "logs", "combined.log");
+const errorLogFilePath = path.join(__dirname, "logs", "errors.log");
 const logDir = path.dirname(logFilePath);
 
 // Ensure the logs directory exists
@@ -42,18 +33,62 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir, { recursive: true });
 }
 
-const logStream = fs.createWriteStream(logFilePath, { flags: "a" });
+const logger = pino({
+  level: "info",
+  transport: process.env.NODE_ENV === "development"
+    ? { target: "pino-pretty" } // Pretty logs for development
+    : undefined, // Default JSON logs for production
+}, pino.destination(logFilePath)); // Combined logs
 
-const originalConsoleLog = console.log;
+// Create writable stream for error logs
+const errorLogStream = fs.createWriteStream(errorLogFilePath, { flags: "a" });
+
 console.log = (...args) => {
-  originalConsoleLog(...args);
-  logStream.write(args.map(String).join(" ") + "\n");
+  logger.info(...args); // Redirect console.log to logger
 };
 
-// Log HTTP requests using Morgan
-app.use(morgan("combined", { stream: logStream }));
+// Log HTTP requests using Morgan, writing to combined log file
+app.use(morgan("combined", { stream: fs.createWriteStream(logFilePath, { flags: "a" }) }));
 
-console.log(`Logs will be saved to: ${logFilePath}`);
+// Middleware to capture errors and write to error log
+app.use((err: { message: any; }, req: any, res: any, next: (arg0: any) => void) => {
+  logger.error(err.message);
+  errorLogStream.write(`${new Date().toISOString()} - ${err.message}\n`);
+  next(err);
+});
+
+// CORS configuration
+const allowedOrigins = [
+  "http://localhost:8080/",
+  "http://localhost:3000/",
+  "https://ecommerce-dashboard-template.vercel.app/",
+  "https://millionairebia.com/",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (process.env.NODE_ENV === "development" || !origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+// Helmet for basic security
+app.use(helmet());
+
+// Set the application to trust the reverse proxy
+app.set("trust proxy", true);
+
+// Notify where logs are saved
+logger.info(`Logs will be saved to: ${logFilePath}`);
+logger.info(`Error logs will be saved to: ${errorLogFilePath}`);
+
+export { app, logger };
 
 
 // Middlewares
@@ -101,4 +136,3 @@ app.use("/dashboard", dashboardRouter);
 // Error handlers
 app.use(errorHandler());
 
-export { app, logger };

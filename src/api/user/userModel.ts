@@ -1,5 +1,5 @@
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
-import { z } from "zod";
+import { optional, z } from "zod";
 
 import { commonValidations } from "@/common/utils/commonValidation";
 
@@ -12,6 +12,7 @@ export const UserSchema = z.object({
   role: z.enum(["admin", "viewer"]), 
   email: z.string().email(), 
   password: z.string(),
+  createdAt : optional(z.date()) 
 });
 
 // Input Validation for 'GET users/:id' endpoint

@@ -18,7 +18,6 @@ export async function addProduct(newProduct: Product): Promise<ServiceResponse<n
       const sanitizedData = sanitizeProductPayload(newProduct);
       const documentToInsert = {
         ...sanitizedData,
-        _id: new ObjectId(),
         createdAt: new Date(),
         updatedAt: new Date(),
       } as any;

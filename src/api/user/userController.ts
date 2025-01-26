@@ -1,7 +1,7 @@
 import type { Request, RequestHandler, Response } from "express";
 
-import { userService } from "@/api/user/userService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
+import { UserService } from "./userService";
 
 class UserController {
   // public getUsers: RequestHandler = async (_req: Request, res: Response) => {
@@ -11,7 +11,13 @@ class UserController {
 
   public getUser: RequestHandler = async (req: Request, res: Response) => {
     const id = req.params.id;
-    const serviceResponse = await userService.findById(String(id));
+    const serviceResponse = await UserService.findUserById(String(id));
+    return handleServiceResponse(serviceResponse, res);
+  };
+
+  public saveOrder : RequestHandler = async (req: Request, res: Response) => {
+    const order = req.body.order;
+    const serviceResponse = await UserService.saveOrder(order);
     return handleServiceResponse(serviceResponse, res);
   };
 }
