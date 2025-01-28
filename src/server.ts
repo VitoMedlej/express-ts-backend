@@ -15,6 +15,7 @@ import { productsRouter } from "./api/products/productsRouter";
 import path from "path";
 import { connectToDatabase } from "./database/mongodbClient";
 import { dashboardRouter } from "./api/dashboard/dashboardRouter";
+import { orderRouter } from "./api/order/orderRouter";
 const morgan = require('morgan');
 const fs = require('fs');
 
@@ -125,10 +126,11 @@ connectToDatabase()
 
 
 // Routes
-app.use("/health-check", healthCheckRouter);
-app.use("/users", userRouter);
-app.use("/products", productsRouter);
-app.use("/dashboard", dashboardRouter);
+app.use("/api/health-check", healthCheckRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productsRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 // Swagger UI
 // app.use(openAPIRouter);

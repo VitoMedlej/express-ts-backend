@@ -15,11 +15,7 @@ class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
-  public saveOrder : RequestHandler = async (req: Request, res: Response) => {
-    const order = req.body.order;
-    const serviceResponse = await UserService.saveOrder(order);
-    return handleServiceResponse(serviceResponse, res);
-  };
+  
 }
 
 export const userController = new UserController();
