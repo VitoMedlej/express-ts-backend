@@ -9,6 +9,8 @@ export async function saveOrder(order: OrderData): Promise<ServiceResponse<Order
   try {
     if (!order || !order.customerName || !order.items || order.items.length === 0) {
       logger.warn("Missing required fields.");
+      logger.warn(`Order details: ${order}` );
+      console.log('order: ', order);
       return ServiceResponse.failure("Missing required fields.", null, StatusCodes.BAD_REQUEST);
     }
 
