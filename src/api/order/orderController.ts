@@ -5,7 +5,7 @@ import { OrderService } from "./orderService";
 
 class OrderController {
     public saveOrder : RequestHandler = async (req, res) => {
-        const orderDetails = req.body;
+        const orderDetails = req.body.orderDetails;
         const serviceResponse = await OrderService.saveOrder(orderDetails);
         return handleServiceResponse(serviceResponse, res);
       };

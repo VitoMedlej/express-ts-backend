@@ -14,15 +14,16 @@ export async function saveOrder(order: OrderData): Promise<ServiceResponse<Order
 
     const ordersCollection = await getCollection("Orders");
 
-    const { id, ...rest } = order; // Exclude `id` for MongoDB
     const documentToInsert = {
-      ...rest,
+      ...order,
       _id: new ObjectId(),
       createdAt: new Date(),
       updatedAt: new Date(),
-    };
+    } as any;
 
-    const result = await ordersCollection.insertOne(documentToInsert as any);
+    delete (documentToInsert as any).id;
+
+    const result = await ordersCollection.insertOne(documentToInsert);
 
     if (!result.acknowledged) {
       logger.error("Failed to save the order.");
@@ -38,8 +39,7 @@ export async function saveOrder(order: OrderData): Promise<ServiceResponse<Order
 
     return ServiceResponse.success<OrderData>("Order saved successfully.", savedOrder);
   } catch (error) {
-    const errorMessage = `Error saving order: ${(error as Error).message}`;
-    logger.error(errorMessage);
+    logger.error(`Error saving order: ${(error as Error).message}`);
     return ServiceResponse.failure("An error occurred while saving the order.", null, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
