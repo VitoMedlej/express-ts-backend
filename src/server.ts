@@ -62,6 +62,7 @@ app.use((err: { message: any; }, req: any, res: any, next: (arg0: any) => void) 
 const allowedOrigins = [
   "http://localhost:8080/",
   "http://localhost:3000/",
+  "https://ecom-template-roan.vercel.app/",
   "https://ecommerce-dashboard-template.vercel.app/",
   "https://millionairebia.com/",
 ];

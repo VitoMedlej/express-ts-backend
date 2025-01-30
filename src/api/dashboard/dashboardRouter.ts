@@ -1,7 +1,5 @@
 import express, { type Router } from "express";
-import { handleServiceResponse, validateRequest } from "@/common/utils/httpHandlers";
 import { dashboardController } from "./dashboardController";
-import { ServiceResponse } from "@/common/models/serviceResponse";
 
 export const dashboardRouter: Router = express.Router();
 
