@@ -6,13 +6,13 @@ import { Product } from "../productModel";
 import { Request } from "express";
 
 
-export async function fetchHomeProducts (req: Request): Promise<ServiceResponse<{ Sectiontype: string; data:Product[]; _id: string; title: string | null; }[] | null>> {
-    const sections: { filterBy: string; value: string | null }[] = req.body || [];
+export async function fetchHomeProducts(req: Request): Promise<ServiceResponse<{ Sectiontype: string; data:Product[]; _id: string; title: string | null; }[] | null>> {
+    const sections: { filterBy: string; value: string | null }[] = req.body || null;
     logger.info(` sections ${sections} and body ${req.body}`);
     console.log('info:', ` sections ${sections} and body ${req.body}`);
-
+    logger.error(`error home products: ${sections} body: ${req.body} `);
     try {
-      if (!sections || sections?.length === 0) {
+      if (!sections) {
       logger.error('sections not found');
       return ServiceResponse.failure("No sections provided", null, StatusCodes.BAD_REQUEST);
 

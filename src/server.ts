@@ -44,7 +44,7 @@ const logger = pino({
 // Create writable stream for error logs
 const errorLogStream = fs.createWriteStream(errorLogFilePath, { flags: "a" });
 
-console.log = (...args) => {
+ console.log = (...args) => {
   logger.info(...args); // Redirect console.log to logger
 };
 
