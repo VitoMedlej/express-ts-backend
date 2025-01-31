@@ -25,6 +25,11 @@ class DashboardController {
         const serviceResponse = await dashboardService.removeProductById(req.params?.id ?? null);
         return handleServiceResponse(serviceResponse, res);
     };
+    removeOrderById: RequestHandler = async (req, res) => {
+        const serviceResponse = await dashboardService.removeOrderById(req.params?.id ?? null);
+        return handleServiceResponse(serviceResponse, res);
+    };
+
     dashboardFetchOrders: RequestHandler = async (req, res) => {
         const serviceResponse = await dashboardService.fetchOrders(req);
         return handleServiceResponse(serviceResponse, res);
