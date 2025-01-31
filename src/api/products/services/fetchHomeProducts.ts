@@ -61,6 +61,7 @@ export async function fetchHomeProducts(req: Request): Promise<ServiceResponse<{
       return ServiceResponse.success("Products found", results as any);
   
     } catch (error) {
+      logger.error(`Received body: ${JSON.stringify(req.body)}`);
       const errorMessage = `Error fetching products: ${(error as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure("An error occurred while retrieving home products.", null, StatusCodes.INTERNAL_SERVER_ERROR);
