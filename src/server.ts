@@ -25,8 +25,8 @@ const fs = require('fs');
 const app: Express = express();
 
 // Configure Pino Logger
-const logFilePath = path.join(__dirname, "logs", "combined.log");
-const errorLogFilePath = path.join(__dirname, "logs", "errors.log");
+const logFilePath = path.join(process.cwd(), "logs", "combined.log");
+const errorLogFilePath = path.join(process.cwd(), "logs", "errors.log");
 const logDir = path.dirname(logFilePath);
 
 // Ensure the logs directory exists
