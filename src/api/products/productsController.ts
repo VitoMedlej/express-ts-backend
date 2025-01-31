@@ -1,10 +1,13 @@
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { RequestHandler } from "express";
 import { ProductsService } from "./productsService";
+import { logger } from "@/server";
 
 
 class ProductsController {
     fetchHomeProducts : RequestHandler = async (req, res) => {
+        console.log('req: ', req);
+        logger.info(`reqbody: ${req.body}`)
         const serviceResponse = await ProductsService.fetchHomeProducts(req);
         return handleServiceResponse(serviceResponse, res);
     }
