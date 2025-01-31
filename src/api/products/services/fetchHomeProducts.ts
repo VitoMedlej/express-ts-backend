@@ -8,8 +8,10 @@ import { Request } from "express";
 
 export async function fetchHomeProducts (req: Request): Promise<ServiceResponse<{ Sectiontype: string; data:Product[]; _id: string; title: string | null; }[] | null>> {
     const sections: { filterBy: string; value: string | null }[] = req.body || [];
+    logger.info(` sections ${sections} and body ${req.body}`);
+
     try {
-      if (!sections || sections?.length < 1) {
+      if (!sections || sections?.length === 0) {
       logger.error('sections not found');
       return ServiceResponse.failure("No sections provided", null, StatusCodes.BAD_REQUEST);
 
