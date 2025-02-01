@@ -99,15 +99,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (process.env.NODE_ENV === "development" || !origin || allowedOrigins.includes(origin)) {
+    origin: function (origin, callback) {
+      if (process.env.NODE_ENV === 'development' || !origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error('Not allowed by CORS'));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE"],  
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Add DELETE and OPTIONS methods
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Add headers that you are sending
     credentials: true,
   })
 );
@@ -138,7 +138,11 @@ connectToDatabase()
   });
 // Routes
 
-
+app.options('/api/test/delete/:id', (req, res) => {
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.status(200).end();
+});
 
 app.delete("/api/test/delete/:id", (req, res) => {
   const { id } = req.params;
