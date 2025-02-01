@@ -127,6 +127,14 @@ connectToDatabase()
   });
 
 
+  app.options('*', cors());
+
+  app.options("/api/", (req, res) => {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(204); // No content, but preflight is successful
+  });
 // Routes
 app.use("/api/health-check", healthCheckRouter);
 app.use("/api/users", userRouter);
@@ -134,12 +142,6 @@ app.use("/api/products", productsRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/dashboard", dashboardRouter);
 
-app.options("/api/dashboard/", (req, res) => {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.sendStatus(204); // No content, but preflight is successful
-});
 
 
 // Swagger UI
