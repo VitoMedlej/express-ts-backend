@@ -97,18 +97,19 @@ export { app, logger };
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-    cors({
-      origin: function (origin, callback) {
-       
-        if ( process.env.NODE_ENV === 'development' ||  !origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-      credentials: true, 
-    })
-  );
+  cors({
+    origin: (origin, callback) => {
+      if (process.env.NODE_ENV === "development" || !origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],  
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(rateLimiter);
 app.use(authenticateRequest)

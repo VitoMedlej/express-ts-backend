@@ -12,13 +12,13 @@ dashboardRouter.post("/auth/login", dashboardController.authenticate);
 // DashboardRouter.get("/fetch-Dashboard", DashboardController.dashboardFetch); 
 
 // Dashboard specific routes
-dashboardRouter.delete("/delete/:id", dashboardController.removeProductById);
+dashboardRouter.delete("/product/delete/:id", dashboardController.removeProductById);
+dashboardRouter.put("/product/update/:id", dashboardController.updateProduct);
 
 
 dashboardRouter.delete("/order/delete/:id", dashboardController.removeOrderById);
 
 dashboardRouter.post("/product/add", dashboardController.saveProduct);
-dashboardRouter.put("/product/update/:id", dashboardController.updateProduct);
 dashboardRouter.get("/fetch-products", dashboardController.dashboardFetch); 
 dashboardRouter.get("/fetch-orders", dashboardController.dashboardFetchOrders); 
 dashboardRouter.get("/fetch-users", dashboardController.dashboardFetchUsers); 
