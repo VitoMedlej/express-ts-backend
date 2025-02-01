@@ -21,3 +21,4 @@ dashboardRouter.post("/product/add", dashboardController.saveProduct);
 dashboardRouter.put("/product/update/:id", dashboardController.updateProduct);
 dashboardRouter.get("/fetch-products", dashboardController.dashboardFetch); 
 dashboardRouter.get("/fetch-orders", dashboardController.dashboardFetchOrders); 
+dashboardRouter.get("/fetch-users", dashboardController.dashboardFetchUsers); 

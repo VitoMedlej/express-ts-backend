@@ -34,6 +34,10 @@ class DashboardController {
         const serviceResponse = await dashboardService.fetchOrders(req);
         return handleServiceResponse(serviceResponse, res);
     };
+    dashboardFetchUsers: RequestHandler = async (req, res) => {
+        const serviceResponse = await dashboardService.fetchUsers(req);
+        return handleServiceResponse(serviceResponse, res);
+    };
 
 }
 
