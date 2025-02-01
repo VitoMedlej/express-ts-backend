@@ -20,7 +20,7 @@ jobs:
       - name: SSH into server and deploy
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 21098 qylmxibqny@millionairebia.com << 'EOF'
-            cd /home/qylmxibqny/express-app
+            cd /home/qylmxibqny/ts-backend
             git pull 
             npm install
             npm run build
