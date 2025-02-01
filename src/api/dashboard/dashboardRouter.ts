@@ -3,6 +3,16 @@ import { dashboardController } from "./dashboardController";
 
 export const dashboardRouter: Router = express.Router();
 
+
+dashboardRouter.options("/product/delete/:id", (req, res) => {
+    res.set("Access-Control-Allow-Origin", "*"); // Adjust if needed
+    res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.sendStatus(204); // No content, successful preflight
+  });
+
+
+
 // Dashboard specific routes
 dashboardRouter.post("/auth/login", dashboardController.authenticate); 
 // DashboardRouter.delete("/:id", DashboardController.removeProductById);
