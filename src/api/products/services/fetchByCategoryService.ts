@@ -5,30 +5,19 @@ import { StatusCodes } from "http-status-codes";
 import { Product } from "../productModel";
 import { Request } from "express";
 
-/**
- * Fetches the total count of products that match the query parameters.
- * @param query Query parameters for the product search.
- * @returns Count of matching products.
- */
 async function getTotalCount(query: any): Promise<number> {
   const productsCollection = await getCollection("Products");
   return productsCollection.countDocuments(query);
 }
 
-/**
- * Fetches products dynamically based on category and query parameters.
- * @param req Express Request object containing dynamic parameters.
- * @returns ServiceResponse with product data.
- */
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ products: Product[]; title: string | null; count: number; } | null>> {
-  const category: string = decodeURIComponent(req.params.category || "");
-  const { search, skip = 0, limit = 12 } = req.query;
-
   try {
-    await connectToDatabase()
+    const category: string = decodeURIComponent(req.params.category || "");
+    const { search, subcategory, skip = 0, limit = 12 } = req.query;
+    
+    await connectToDatabase();
     
     const productsCollection = await getCollection("Products");
-
     let query: any = {};
 
     if (search != undefined && `${search}`?.length > 2) {
@@ -40,10 +29,10 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
       case "collection":
       case "products":
       case "collections":
-        query = { ...query }; // Latest added products
+        query = { ...query };
         break;
       case "new-arrivals":
-        query = { ...query, createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } }; // Last 30 days
+        query = { ...query, createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } };
         break;
       case "best-sellers":
         query = { ...query, bestSeller: true };
@@ -52,12 +41,15 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
         if (category) query = { ...query, category };
     }
 
-    // Get total count of products
+    if (subcategory) {
+      query = { ...query, subcategory };
+    }
+
     const count = await getTotalCount(query);
 
     const rawProducts = await productsCollection
       .find(query)
-      .sort({ createdAt: -1 }) // Sort by latest added
+      .sort({ createdAt: -1 })
       .skip(Number(skip))
       .limit(Number(limit))
       .toArray();

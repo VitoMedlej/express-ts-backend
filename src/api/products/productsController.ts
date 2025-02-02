@@ -29,6 +29,10 @@ class ProductsController {
         const serviceResponse = await ProductsService.searchProductService(req);
         return handleServiceResponse(serviceResponse, res);
     };
+    fetchRecommendedProducts :RequestHandler = async (req, res) => {
+        const serviceResponse = await ProductsService.fetchRecommendedProductsService(req);
+        return handleServiceResponse(serviceResponse, res);
+    };
     
     
 }

@@ -138,32 +138,6 @@ connectToDatabase()
   });
 // Routes
 
-app.options('/api/test/delete/:id', (req, res) => {
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.status(200).end();
-});
-
-
-app.get("/api/test", (req, res) => {
-
-  // Responding with a simple success message
-  res.status(200).json({
-    message: `Successfully deleted product with ID:`,
-  
-  });
-});
-app.delete("/api/test/delete/:id", (req, res) => {
-  const { id } = req.params;
-  console.log(`Trying to delete product with ID: ${id}`);
-
-  // Responding with a simple success message
-  res.status(200).json({
-    message: `Successfully deleted product with ID: ${id}`,
-    id: id,
-  });
-});
-
 app.use("/api/health-check", healthCheckRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productsRouter);
