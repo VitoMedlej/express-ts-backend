@@ -6,14 +6,10 @@ import { Product } from "../productModel";
 import { Request } from "express";
 
 
-async function getTotalCount(query: any): Promise<number> {
-  const productsCollection = await getCollection("Products");
-  return productsCollection.countDocuments(query);
-}
 
 export async function fetchRecommendedProductsService(
   req: Request
-): Promise<ServiceResponse<{ products: Product[]; count: number } | null>> {
+): Promise<ServiceResponse<{ products: Product[]} | null>> {
   try {
     const { limit = 12 } = req.query;
     
@@ -21,8 +17,6 @@ export async function fetchRecommendedProductsService(
 
     const productsCollection = await getCollection("Products");
     const query: any = {};
-
-    const count = await getTotalCount(query);
 
     const rawProducts = await productsCollection
       .find(query)
@@ -39,7 +33,7 @@ export async function fetchRecommendedProductsService(
         id: product._id.toString(),
         ...product,
       })) as Product[],
-      count, 
+
     };
 
     return ServiceResponse.success("Recommended products fetched successfully.", result);
