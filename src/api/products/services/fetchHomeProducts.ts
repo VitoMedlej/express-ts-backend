@@ -35,7 +35,7 @@ export async function fetchHomeProducts(req: Request): Promise<ServiceResponse<{
         }
   
         // Fetch products based on the query
-        const rawProducts = await productsCollection.find(query).toArray();
+        const rawProducts = await productsCollection.find(query).sort({_id:-1}).toArray();
   
         if (rawProducts && rawProducts.length > 0) {
           results.push({
