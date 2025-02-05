@@ -1,3 +1,4 @@
+// fetchByCategoryService.ts
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 import { logger } from "@/server";
@@ -14,60 +15,48 @@ async function getTotalCount(query: any): Promise<number> {
 
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ products: Product[]; title: string | null; count: number; } | null>> {
   try {
+    logger.info('req.body:', JSON.stringify(req.body));
+    logger.info('req.params:', JSON.stringify(req.params));
     const category: string = decodeURIComponent(req.params.category || "");
-    
-    // Get data from req.body, not req.query
-    const { search, subcategory, skip = 0, limit = 12, sort, size, color } = req.body;
-    
-    console.log('color: ', color);
-    console.log('size: ', size);
-    console.log('sort: ', sort);
-    console.log('subcategory: ', subcategory);
-    console.log('search: ', search);
-    console.log('category: ', category);
-    await connectToDatabase();
+    logger.info(`Category: ${category}`);
 
+    const { search, subcategory, skip = 0, limit = 12, sort, size, color } = req.body;
+    logger.info(`search: ${search}, subcategory: ${subcategory}, sort: ${sort}, size: ${size}, color: ${color}`);
+
+    await connectToDatabase();
     const productsCollection = await getCollection("Products");
     let query: any = {};
 
-    // Handle search query
-    if (search && `${search}`.length > 2) {
-      query.$text = { $search: decodeURIComponent(search as string) };
+    if (search && `${search}`.trim().length > 2) {
+      query.$text = { $search: decodeURIComponent(search) };
     }
 
-    // Category filters
     switch (category) {
       case "all":
       case "collection":
       case "products":
       case "collections":
-        query = { ...query };
         break;
       case "new-arrivals":
-        query = { ...query, createdAt: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } };
+        query.createdAt = { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) };
         break;
       case "best-sellers":
-        query = { ...query, bestSeller: true };
+        query.bestSeller = true;
         break;
       default:
-        if (category) query = { ...query, category };
+        query.category = category;
     }
 
-    // Subcategory filter
-    if (subcategory) {
-      query = { ...query, subcategory };
+    if (subcategory && subcategory !== "undefined") {
+      query.subcategory = subcategory;
     }
 
-    // Handle filters for size and color
-    query = handleFilters(query, { size:`${size}` , color: `${color}` });
-
-    // Handle sorting
+    query = handleFilters(query, { size, color });
     const sortQuery = handleSortQuery({ sort: sort as string, size, color });
+    logger.info('sortQuery:', JSON.stringify(sortQuery));
+    logger.info('query:', JSON.stringify(query));
 
-    // Get total count of products
     const count = await getTotalCount(query);
-
-    // Fetch products from database
     const rawProducts = await productsCollection
       .find(query)
       .sort(sortQuery)
@@ -84,16 +73,11 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
         id: product._id.toString(),
         ...product,
       })) as Product[],
-
       title:
-        category === "products" || category === "collections"
-          ? "Latest Products"
-          : category === "new-arrivals"
-          ? "New Arrivals"
-          : category === "best-sellers"
-          ? "Best Sellers"
-          : category || "All Products",
-
+        (category === "products" || category === "collections") ? "Latest Products" :
+        (category === "new-arrivals") ? "New Arrivals" :
+        (category === "best-sellers") ? "Best Sellers" :
+        category || "All Products",
       count,
     };
 
