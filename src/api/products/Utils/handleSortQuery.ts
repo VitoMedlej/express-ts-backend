@@ -8,12 +8,15 @@ type SortBy = {
 
 export function handleSortQuery(query: SortBy): any {
   try {
-    const { sort, direction = 'asc', ...rest } = query;
+    const { sort, direction = 'desc', ...rest } = query;
     if (direction !== 'asc' && direction !== 'desc') {
-      throw new Error('Invalid sort direction. Allowed values are "asc" or "desc".');
+      console.error('Invalid sort direction. Using default sort by createdAt descending.');
+      return { createdAt: -1 };
     }
     const filters = Object.fromEntries(
-      Object.entries(rest).filter(([_, value]) => value !== undefined && value !== null && value !== '' && value !== "undefined")
+      Object.entries(rest).filter(
+        ([, value]) => value !== undefined && value !== null && value !== '' && value !== "undefined"
+      )
     );
     if (!sort) {
       return { createdAt: direction === 'asc' ? 1 : -1 };
@@ -22,7 +25,7 @@ export function handleSortQuery(query: SortBy): any {
     sortOrder[sort] = direction === 'asc' ? 1 : -1;
     return { ...sortOrder, ...filters };
   } catch (error) {
-    console.error('Error handling sort query:', (error as Error).message);
-    throw new Error('Invalid sorting query.');
+    console.error('Error handling sort query:', (error as Error).message, 'Using default sort by createdAt descending.');
+    return { createdAt: -1 };
   }
 }
