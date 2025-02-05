@@ -14,7 +14,16 @@ async function getTotalCount(query: any): Promise<number> {
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ products: Product[]; title: string | null; count: number; } | null>> {
   try {
     const category: string = decodeURIComponent(req.params.category || "");
-    const { search, subcategory, skip = 0, limit = 12, sort, size, color } = req.query;
+    
+    // Get data from req.body, not req.query
+    const { search, subcategory, skip = 0, limit = 12, sort, size, color } = req.body;
+    
+    console.log('color: ', color);
+    console.log('size: ', size);
+    console.log('sort: ', sort);
+    console.log('subcategory: ', subcategory);
+    console.log('search: ', search);
+    console.log('category: ', category);
     await connectToDatabase();
 
     const productsCollection = await getCollection("Products");
@@ -74,6 +83,7 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
         id: product._id.toString(),
         ...product,
       })) as Product[],
+
       title:
         category === "products" || category === "collections"
           ? "Latest Products"
@@ -82,6 +92,7 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
           : category === "best-sellers"
           ? "Best Sellers"
           : category || "All Products",
+
       count,
     };
 
