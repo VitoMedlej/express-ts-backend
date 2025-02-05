@@ -4,6 +4,7 @@ import { logger } from "@/server";
 import { StatusCodes } from "http-status-codes";
 import { Product } from "../productModel";
 import { Request } from "express";
+import { handleSortQuery } from "../Utils/handleSortQuery";
 
 async function getTotalCount(query: any): Promise<number> {
   const productsCollection = await getCollection("Products");
@@ -13,17 +14,18 @@ async function getTotalCount(query: any): Promise<number> {
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ products: Product[]; title: string | null; count: number; } | null>> {
   try {
     const category: string = decodeURIComponent(req.params.category || "");
-    const { search, subcategory, skip = 0, limit = 12 } = req.query;
-    
+    const { search, subcategory, skip = 0, limit = 12, sort, size, color } = req.query;
     await connectToDatabase();
-    
+
     const productsCollection = await getCollection("Products");
     let query: any = {};
 
-    if (search != undefined && `${search}`?.length > 2) {
+    // Handle search query
+    if (search && `${search}`.length > 2) {
       query.$text = { $search: decodeURIComponent(search as string) };
     }
 
+    // Category filters
     switch (category) {
       case "all":
       case "collection":
@@ -41,15 +43,24 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
         if (category) query = { ...query, category };
     }
 
+    // Subcategory filter
     if (subcategory) {
       query = { ...query, subcategory };
     }
 
+    // Handle filters for size and color
+    query = handleFilters(query, { size:`${size}` , color: `${color}` });
+
+    // Handle sorting
+    const sortQuery = handleSortQuery({ sort: sort as string, size, color });
+
+    // Get total count of products
     const count = await getTotalCount(query);
 
+    // Fetch products from database
     const rawProducts = await productsCollection
       .find(query)
-      .sort({ createdAt: -1 })
+      .sort(sortQuery)
       .skip(Number(skip))
       .limit(Number(limit))
       .toArray();
@@ -71,7 +82,7 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
           : category === "best-sellers"
           ? "Best Sellers"
           : category || "All Products",
-      count, 
+      count,
     };
 
     return ServiceResponse.success("Products fetched successfully.", result);
