@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { Product } from "../productModel";
 import { Request } from "express";
 import { handleSortQuery } from "../Utils/handleSortQuery";
+import { handleFilters } from "../Utils/handleFilters";
 
 async function getTotalCount(query: any): Promise<number> {
   const productsCollection = await getCollection("Products");

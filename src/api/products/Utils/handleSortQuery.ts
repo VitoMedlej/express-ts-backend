@@ -7,12 +7,17 @@ type SortBy = {
 
 function handleSortQuery(query: SortBy): any {
   try {
-    const { sort, direction = 'asc', ...filters } = query;
+    const { sort, direction = 'asc', ...rest } = query;
 
     // Validate direction
     if (direction !== 'asc' && direction !== 'desc') {
       throw new Error('Invalid sort direction. Allowed values are "asc" or "desc".');
     }
+
+    // Remove undefined, null, or empty string values from the additional filters
+    const filters = Object.fromEntries(
+      Object.entries(rest).filter(([_, value]) => value !== undefined && value !== null && value !== '')
+    );
 
     // Default sort if no sort field is provided
     if (!sort) {
@@ -23,7 +28,7 @@ function handleSortQuery(query: SortBy): any {
     const sortOrder: any = {};
     sortOrder[sort] = direction === 'asc' ? 1 : -1;
 
-    // Add any additional filters (e.g., size, color) directly to the query if needed
+    // Merge sort order with any additional filters that remain
     return { ...sortOrder, ...filters };
   } catch (error) {
     console.error('Error handling sort query:', (error as Error).message);
