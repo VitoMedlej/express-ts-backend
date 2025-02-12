@@ -1,31 +1,49 @@
-// handleSortQuery.ts
-type SortDirection = 'asc' | 'desc';
-type SortBy = {
-  sort?: string;
-  direction?: SortDirection;
-  [key: string]: any;
-};
-
-export function handleSortQuery(query: SortBy): any {
+export function handleSortQuery(query: { sort?: string | null; size?: string; color?: string }): Record<string, any> {
   try {
-    const { sort, direction = 'desc', ...rest } = query;
-    if (direction !== 'asc' && direction !== 'desc') {
-      console.error('Invalid sort direction. Using default sort by createdAt descending.');
-      return { createdAt: -1 };
+    const sort = query.sort?.trim() !== 'undefined' && query.sort?.trim() !== '' ? `${query.sort}`.trim() : 'newest';
+    const filter: Record<string, any> = {};
+
+    if (query.size && query.size !== 'undefined') {
+      filter['variants'] = { $elemMatch: { key: 'size', value: query.size } };
     }
-    const filters = Object.fromEntries(
-      Object.entries(rest).filter(
-        ([, value]) => value !== undefined && value !== null && value !== '' && value !== "undefined"
-      )
-    );
-    if (!sort) {
-      return { createdAt: direction === 'asc' ? 1 : -1 };
+    if (query.color && query.color !== 'undefined') {
+      filter['variants'] = { $elemMatch: { key: 'color', value: query.color } };
     }
-    const sortOrder: any = {};
-    sortOrder[sort] = direction === 'asc' ? 1 : -1;
-    return { ...sortOrder, ...filters };
+
+    console.log('filter: ', filter); // Log the filter being created.
+    console.log('sort: ', sort); // Log the sort option passed.
+
+    let sortQuery = {};
+
+    // Add condition for sorting based on the value of `sort`
+    if (sort === 'highToLow') {
+      sortQuery = { 
+        ...filter, 
+        price: { $cond: [{ $eq: [{ $type: "$price" }, "string"] }, { $toDouble: "$price" }, "$price"] },
+        newPrice: { $cond: [{ $eq: [{ $type: "$newPrice" }, "string"] }, { $toDouble: "$newPrice" }, "$newPrice"] }
+      };
+    } else if (sort === 'lowToHigh') {
+      sortQuery = { 
+        ...filter, 
+        price: { $cond: [{ $eq: [{ $type: "$price" }, "string"] }, { $toDouble: "$price" }, "$price"] },
+        newPrice: { $cond: [{ $eq: [{ $type: "$newPrice" }, "string"] }, { $toDouble: "$newPrice" }, "$newPrice"] }
+      };
+    } else if (sort === 'onSale') {
+      sortQuery = { 
+        ...filter, 
+        newPrice: { $gt: 0 }, 
+        price: -1 
+      };
+    } else if (sort === 'newest') {
+      sortQuery = { ...filter, createdAt: -1 };
+    }
+
+    // Log the final sortQuery being returned
+    console.log('final sortQuery: ', sortQuery);
+
+    return sortQuery;
   } catch (error) {
-    console.error('Error handling sort query:', (error as Error).message, 'Using default sort by createdAt descending.');
-    return { createdAt: -1 };
+    console.error('Error handling sort query:', (error as Error).message);
+    return { createdAt: -1 }; // Default fallback to avoid breaking the function
   }
 }

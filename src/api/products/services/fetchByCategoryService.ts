@@ -53,8 +53,7 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
 
     query = handleFilters(query, { size, color });
     const sortQuery = handleSortQuery({ sort: sort as string, size, color });
-    logger.info('sortQuery:', JSON.stringify(sortQuery));
-    logger.info('query:', JSON.stringify(query));
+    logger.info( `${JSON.stringify(sortQuery)}`);
 
     const count = await getTotalCount(query);
     const rawProducts = await productsCollection
