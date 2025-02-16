@@ -29,6 +29,9 @@ dashboardRouter.put("/product/update/:id", dashboardController.updateProduct);
 dashboardRouter.delete("/order/delete/:id", dashboardController.removeOrderById);
 
 dashboardRouter.post("/product/add", dashboardController.saveProduct);
+dashboardRouter.put("/product/status/:id", dashboardController.updateProductStatus);
+
+
 dashboardRouter.get("/fetch-products", dashboardController.dashboardFetch); 
 dashboardRouter.get("/fetch-orders", dashboardController.dashboardFetchOrders); 
 dashboardRouter.get("/fetch-users", dashboardController.dashboardFetchUsers); 

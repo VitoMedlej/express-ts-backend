@@ -8,6 +8,7 @@ import { updateProductById } from "./services/updateProductService";
 import { fetchOrders } from "./services/FetchOrders";
 import { removeOrderById } from "./services/removeOrderById";
 import { fetchUsers } from "./services/fetchUsers";
+import { updateProductStatus } from "./services/updateProductStatus";
 
 
 
@@ -19,5 +20,6 @@ export const dashboardService = {
     fetchDashboardProducts,
     fetchOrders,
     removeOrderById,
-    fetchUsers
+    fetchUsers,
+    updateProductStatus
 };

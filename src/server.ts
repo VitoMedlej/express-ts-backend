@@ -139,6 +139,8 @@ connectToDatabase()
 // Routes
 
 app.use("/api/health-check", healthCheckRouter);
+
+
 app.get("/a25.mp4", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "a25.mp4"));
 });
