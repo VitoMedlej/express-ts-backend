@@ -1,4 +1,3 @@
-// handleFilters.ts
 export function handleFilters(query: any, filters: { size?: string; color?: string }): any {
   if (filters.size && filters.size !== "undefined") {
     const sizes = filters.size.split(",").filter(s => s && s !== "undefined");

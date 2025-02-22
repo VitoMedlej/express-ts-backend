@@ -1,49 +1,31 @@
 export function handleSortQuery(query: { sort?: string | null; size?: string; color?: string }): Record<string, any> {
   try {
-    const sort = query.sort?.trim() !== 'undefined' && query.sort?.trim() !== '' ? `${query.sort}`.trim() : 'newest';
-    const filter: Record<string, any> = {};
+    // Use the sort provided by the client if it is defined and not an empty string.
+    const sortOption = (query.sort && query.sort.trim() !== '' && query.sort !== 'undefined')
+      ? query.sort.trim()
+      : 'newest';
 
-    if (query.size && query.size !== 'undefined') {
-      filter['variants'] = { $elemMatch: { key: 'size', value: query.size } };
-    }
-    if (query.color && query.color !== 'undefined') {
-      filter['variants'] = { $elemMatch: { key: 'color', value: query.color } };
-    }
+    let sortQuery: Record<string, any> = {};
 
-    console.log('filter: ', filter); // Log the filter being created.
-    console.log('sort: ', sort); // Log the sort option passed.
-
-    let sortQuery = {};
-
-    // Add condition for sorting based on the value of `sort`
-    if (sort === 'highToLow') {
-      sortQuery = { 
-        ...filter, 
-        price: { $cond: [{ $eq: [{ $type: "$price" }, "string"] }, { $toDouble: "$price" }, "$price"] },
-        newPrice: { $cond: [{ $eq: [{ $type: "$newPrice" }, "string"] }, { $toDouble: "$newPrice" }, "$newPrice"] }
-      };
-    } else if (sort === 'lowToHigh') {
-      sortQuery = { 
-        ...filter, 
-        price: { $cond: [{ $eq: [{ $type: "$price" }, "string"] }, { $toDouble: "$price" }, "$price"] },
-        newPrice: { $cond: [{ $eq: [{ $type: "$newPrice" }, "string"] }, { $toDouble: "$newPrice" }, "$newPrice"] }
-      };
-    } else if (sort === 'onSale') {
-      sortQuery = { 
-        ...filter, 
-        newPrice: { $gt: 0 }, 
-        price: -1 
-      };
-    } else if (sort === 'newest') {
-      sortQuery = { ...filter, createdAt: -1 };
+    switch (sortOption) {
+      case 'highToLow':
+        // For highToLow, sort descending by newPrice first and then price.
+        sortQuery = { newPrice: -1, price: -1 };
+        break;
+      case 'lowToHigh':
+        // For lowToHigh, sort ascending by newPrice first and then price.
+        sortQuery = { newPrice: 1, price: 1 };
+        break;
+      case 'newest':
+      default:
+        sortQuery = { createdAt: -1 };
+        break;
     }
 
-    // Log the final sortQuery being returned
     console.log('final sortQuery: ', sortQuery);
-
     return sortQuery;
   } catch (error) {
     console.error('Error handling sort query:', (error as Error).message);
-    return { createdAt: -1 }; // Default fallback to avoid breaking the function
+    return { createdAt: -1 }; // Fallback sort order
   }
 }

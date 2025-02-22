@@ -1,4 +1,3 @@
-// fetchByCategoryService.ts
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { connectToDatabase, getCollection } from "@/database/mongodbClient";
 import { logger } from "@/server";
@@ -15,13 +14,13 @@ async function getTotalCount(query: any): Promise<number> {
 
 export async function fetchByCategoryService(req: Request): Promise<ServiceResponse<{ products: Product[]; title: string | null; count: number; } | null>> {
   try {
-    logger.info('req.body:', JSON.stringify(req.body));
-    logger.info('req.params:', JSON.stringify(req.params));
+    logger.info( JSON.stringify(req.body));
+    logger.info( JSON.stringify(req.params));
     const category: string = decodeURIComponent(req.params.category || "");
     logger.info(`Category: ${category}`);
 
     const { search, subcategory, skip = 0, limit = 12, sort, size, color } = req.body;
-    logger.info(`search: ${search}, subcategory: ${subcategory}, sort: ${sort}, size: ${size}, color: ${color}`);
+    logger.info(`category: ${category} search: ${search}, subcategory: ${subcategory}, sort: ${sort}, size: ${size}, color: ${color}`);
 
     await connectToDatabase();
     const productsCollection = await getCollection("Products");
@@ -45,15 +44,24 @@ export async function fetchByCategoryService(req: Request): Promise<ServiceRespo
         break;
       default:
         query.category = category;
-    }
+      }
+      console.log(query);
 
     if (subcategory && subcategory !== "undefined") {
       query.subcategory = subcategory;
     }
 
+    // Filter for onSale should be applied here (not as a sort)
+    if (sort === 'onSale') {
+      query.onSale = true;
+    }
+
     query = handleFilters(query, { size, color });
     const sortQuery = handleSortQuery({ sort: sort as string, size, color });
-    logger.info( `${JSON.stringify(sortQuery)}`);
+    logger.info(`${JSON.stringify(sortQuery)}`);
+
+    // Add filter for disabled products
+    query.disabled = { $ne: true };
 
     const count = await getTotalCount(query);
     const rawProducts = await productsCollection
