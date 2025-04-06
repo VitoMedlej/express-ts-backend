@@ -1,73 +1,133 @@
-# 🚀 Express TypeScript Boilerplate 2024
+🚀 Express TypeScript Backend – Scalable eCommerce API
+Build · Auth · Role-based Routing · Dashboard API · Product Management · CI/CD Ready
 
-[![Build](https://github.com/edwinhern/express-typescript-2024/actions/workflows/build.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/build.yml)
-[![Test](https://github.com/edwinhern/express-typescript-2024/actions/workflows/test.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/test.yml)
-[![Code Quality](https://github.com/edwinhern/express-typescript-2024/actions/workflows/code-quality.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/code-quality.yml)
-[![Docker Image CI](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml/badge.svg)](https://github.com/edwinhern/express-typescript-2024/actions/workflows/docker-image.yml)
+Hey there! 🙌
+⭐ Star this repo if you find it helpful or use it in your projects!
 
-``` code
-Hey There! 🙌 
-🤾 that ⭐️ button if you like this boilerplate. 
-```
+🌟 Introduction
+Welcome to the Express TypeScript Backend – a production-grade, scalable, and feature-rich API server powering the fullstack eCommerce template. Built on top of express-typescript-2024 by @edwinhern and extended with full dashboard features, robust user authentication, AI-driven endpoints, and public-facing API routes.
 
-## 🌟 Introduction
+💡 Motivation
+This backend aims to:
 
-Welcome to the Express TypeScript Boilerplate 2024 – a streamlined, efficient, and scalable foundation for building powerful backend services with modern tools and practices in Express.js and TypeScript.
+🚀 Power a fully customizable eCommerce experience
 
-## 💡 Motivation
+📦 Support both public (client) and private (admin) routes
 
-This boilerplate aims to:
+🔐 Handle secure, role-based authentication (Auth0 & JWT)
 
-- ✨ Reduce setup time for new projects
-- 📊 Ensure code consistency and quality
-- ⚡  Facilitate rapid development
-- 🛡️ Encourage best practices in security, testing, and performance
+🛒 Enable product creation, filtering, search, and AI recommendations
 
-## 🚀 Features
+🧱 Maintain clean, scalable architecture with type safety and modular design
 
-- 📁 Modular Structure: Organized by feature for easy navigation and scalability
-- 💨 Faster Execution with tsx: Rapid TypeScript execution with `tsx` and type checking with `tsc`
-- 🌐 Stable Node Environment: Latest LTS Node version in `.nvmrc`
-- 🔧 Simplified Environment Variables: Managed with Envalid
-- 🔗 Path Aliases: Cleaner code with shortcut imports
-- 🔄 Renovate Integration: Automatic updates for dependencies
-- 🔒 Security: Helmet for HTTP header security and CORS setup
-- 📊 Logging: Efficient logging with `pino-http`
-- 🧪 Comprehensive Testing: Setup with Vitest and Supertest
-- 🔑 Code Quality Assurance: Husky and lint-staged for consistent quality
-- ✅ Unified Code Style: `Biomejs` for consistent coding standards
-- 📃 API Response Standardization: `ServiceResponse` class for consistent API responses
-- 🐳 Docker Support: Ready for containerization and deployment
-- 📝 Input Validation with Zod: Strongly typed request validation using `Zod`
-- 🧩 Swagger UI: Interactive API documentation generated from Zod schemas
+⚙️ Key Features
+🧱 Scalable Architecture: Modular structure separated by features and roles (admin/client)
 
-## 🛠️ Getting Started
+🔄 Role-Based Routing: Admin (dashboard) and Client (frontend) APIs separated for clarity & control
 
-### Video Demo
+🔐 Auth0 Integration: Auth middleware, JWT validation, and user access control
 
-For a visual guide, watch the [video demo](https://github.com/user-attachments/assets/b1698dac-d582-45a0-8d61-31131732b74e) to see the setup and running of the project.
+🛒 Product APIs: CRUD, filtering, search, and recommendation support
 
-### Step-by-Step Guide
+📦 Order & Cart Endpoints: (Optional) Easy to extend with cart/order logic
 
-#### Step 1: 🚀 Initial Setup
+⚙️ Environment-Driven Config: Centralized and type-safe using Envalid
 
-- Clone the repository: `git clone https://github.com/edwinhern/express-typescript-2024.git`
-- Navigate: `cd express-typescript-2024`
-- Install dependencies: `npm ci`
+📃 API Docs: Swagger UI auto-generated from Zod schemas
 
-#### Step 2: ⚙️ Environment Configuration
+🧪 Testing: Vitest + Supertest for robust backend test coverage
 
-- Create `.env`: Copy `.env.template` to `.env`
-- Update `.env`: Fill in necessary environment variables
+📊 Logging: Fast logging with pino-http
 
-#### Step 3: 🏃‍♂️ Running the Project
+🛡️ Security: Helmet, CORS, rate limiting
 
-- Development Mode: `npm run dev`
-- Building: `npm run build`
-- Production Mode: Set `.env` to `NODE_ENV="production"` then `npm run build && npm run start`
+🛠️ CI-Ready: Lint, test, and build hooks for clean pipelines
 
-## 🤝 Feedback and Contributions
+🐳 Docker Support: Easily deployable container config
 
-We'd love to hear your feedback and suggestions for further improvements. Feel free to contribute and join us in making backend development cleaner and faster!
+✨ Built with TypeScript: Full type-safety across the stack
 
-🎉 Happy coding!
+📁 Folder Structure
+pgsql
+Copy
+Edit
+/src
+  /routes        // Grouped by domain and role
+  /controllers   // Logic per route
+  /services      // Business logic layer
+  /middlewares   // Auth, rate-limit, etc.
+  /schemas       // Zod validation schemas
+  /types         // Global TS types
+🛠️ Getting Started
+Step 1: Clone & Install
+bash
+Copy
+Edit
+git clone https://github.com/VitoMedlej/express-ts-backend.git
+cd express-ts-backend
+npm install
+Step 2: Configure Environment
+bash
+Copy
+Edit
+cp .env.example .env
+# then update with your values
+Step 3: Run the Server
+bash
+Copy
+Edit
+# Development mode
+npm run dev
+
+# Build & Start
+npm run build && npm start
+Server will run at http://localhost:8080
+
+🌐 Public & Private APIs
+// To be documented soon!
+
+🧪 Scripts
+bash
+Copy
+Edit
+npm run dev        # Start in dev mode
+npm run build      # Build production-ready code
+npm run start      # Run built code
+npm run test       # Run tests
+npm run lint       # Lint using Biome
+📝 Environment Variables
+env
+Copy
+Edit
+# Basic
+NODE_ENV="development"
+PORT="8080"
+HOST="localhost"
+IS_PROD="false"
+
+# CORS
+CORS_ORIGIN="http://localhost:*"
+
+# Rate Limit
+COMMON_RATE_LIMIT_WINDOW_MS="1000"
+COMMON_RATE_LIMIT_MAX_REQUESTS="20"
+
+# Auth
+JWT_SECRET="your_jwt_secret"
+AUTH0_DOMAIN="your-auth0-domain"
+AUTH0_AUDIENCE="your-auth0-audience"
+
+# MongoDB
+MONGODB_CONNECTION="mongodb+srv://..."
+MONGODB_CONNECTION_READONLY="mongodb+srv://..."
+MONGO_DB_NAME="your_db"
+
+# AI / Recommender
+RECOMBEE_API_KEY="your_key"
+RECOMBEE_DATABASE_ID="your_id"
+📜 Attribution
+This project is heavily based on the excellent work of @edwinhern’s express-typescript-2024 boilerplate, and scaled/customized into a full eCommerce backend with user roles, dashboard support, and external service integrations.
+
+🙌 Feedback & Contributions
+Got a suggestion? Found a bug? Open an issue or PR.
+Let’s make backend development better, together.
