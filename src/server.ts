@@ -63,9 +63,8 @@ const allowedOrigins = [
   "http://localhost:8080/",
   "http://localhost:3000/",
   "https://ecom-template-roan.vercel.app/",
-  "https://ecommerce-dashboard-template.vercel.app/",
-  "https://ecommerce-dashboard-template.vercel.app",
-  "https://millionairebia.com/",
+  "express-ts-backend-1.onrender.com/",
+  "express-ts-backend-1.onrender.com",
 ];
 
 app.use(
