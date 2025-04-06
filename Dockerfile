@@ -2,9 +2,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /src
 COPY package.json package-lock.json ./
-RUN npm ci                     # install all deps
-COPY . .                       # copy source
-RUN npm run build              # tsup → dist/
+RUN npm ci                    
+COPY . ./                 
+RUN npm run build          
 
 # ── 2) Runtime stage ───────────────────────────────────────────
 FROM node:20-alpine
