@@ -42,6 +42,10 @@ class DashboardController {
         const serviceResponse = await dashboardService.updateProductStatus(req.params.id);
         return handleServiceResponse(serviceResponse, res);
     };
+    generateDescription :   RequestHandler = async(req, res) => {
+        const serviceResponse = await dashboardService.GenerateDescription(req);
+        return handleServiceResponse(serviceResponse, res);
+    };
 
 }
 

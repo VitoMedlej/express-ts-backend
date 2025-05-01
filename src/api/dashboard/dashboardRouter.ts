@@ -35,3 +35,5 @@ dashboardRouter.put("/product/status/:id", dashboardController.updateProductStat
 dashboardRouter.get("/fetch-products", dashboardController.dashboardFetch); 
 dashboardRouter.get("/fetch-orders", dashboardController.dashboardFetchOrders); 
 dashboardRouter.get("/fetch-users", dashboardController.dashboardFetchUsers); 
+
+dashboardRouter.post("/generate-description", dashboardController.generateDescription); 

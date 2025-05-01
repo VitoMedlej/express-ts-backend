@@ -11,5 +11,6 @@ export const ProductsService = {
     fetchDashboardProducts,
     fetchByCategoryService,
     searchProductService,
-    fetchRecommendedProductsService
+    fetchRecommendedProductsService,
+    
 };

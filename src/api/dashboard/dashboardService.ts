@@ -9,6 +9,7 @@ import { fetchOrders } from "./services/FetchOrders";
 import { removeOrderById } from "./services/removeOrderById";
 import { fetchUsers } from "./services/fetchUsers";
 import { updateProductStatus } from "./services/updateProductStatus";
+import { GenerateDescription } from "./services/GenerateDescription";
 
 
 
@@ -21,5 +22,6 @@ export const dashboardService = {
     fetchOrders,
     removeOrderById,
     fetchUsers,
-    updateProductStatus
+    updateProductStatus,
+    GenerateDescription
 };
