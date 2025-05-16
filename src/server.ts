@@ -62,9 +62,9 @@ app.use((err: { message: any; }, req: any, res: any, next: (arg0: any) => void) 
 const allowedOrigins = [
   "http://localhost:8080/",
   "http://localhost:3000/",
-  "https://ecom-template-roan.vercel.app/",
-  "express-ts-backend-1.onrender.com/",
-  "express-ts-backend-1.onrender.com",
+  "https://backendapi.wavescode.com",
+  "https://backendapi.wavescode.com",
+  "backendapi.wavescode.com",
 ];
 
 app.use(
